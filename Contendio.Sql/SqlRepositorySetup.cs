@@ -25,7 +25,7 @@ namespace Contendio.Sql
 
         public SqlRepositorySetup(string schema, string repository, string connectionString)
         {
-            this.DatabaseSchema = schema;
+            this.DatabaseSchema = SqlUtils.SchemaNameFromConnectionString(connectionString);
             this.Repository = repository;
             this.connectionString = connectionString;
         }
