@@ -1,0 +1,41 @@
+What is a content repository and why use them?
+===========================
+The short version: A content repository is a way to simulate a document database in a rational database.
+The long version: Content repositories are often used in CRM and CMS systems. This is because a document database structure fits those
+types of systems better then simple rational databases.... <add more stuff here>
+
+
+Requirements
+======================
+1. Microsoft .NET Framework 4
+http://www.microsoft.com/downloads/sv-se/details.aspx?FamilyID=9cfb2d51-5ff4-4491-b0e5-b386f32c0992
+
+2. Visual Studio 2010
+
+3. Microsoft SQL Server 2008 
+
+4. Recommended: Management Studio
+
+ <add more stuff here>
+
+Howto
+======================
+This description only works if you have Ultimate Edition of Visual Studio at the moment. 
+A description for Visual Studio 2010 C# Express will be added shortly.
+
+1. Create a database in your Microsoft SQL Server. It doesn't matter what you call it.
+1.1. Above is not completely true. I'm planning on adding SQLite when performing the unit-tests, but they require
+that a database called "contenido" exists. (Se the constant ConnectionString in the testcases: ContentRepositoryTest and EventTest).
+Change that constant into your a version that matches your own database.
+
+2. Open Contenido.sln
+
+3. Run tests
+
+Contenido automatically creates the neccessary tables for it to work based on the DatabaseSchema, ConnectionString and the repository name.
+The test cases use the Repository name "test" which means that when using that repository instance all LINQ queries used will go to those databases.
+Example: When SqlContentRepository initializes, it creates tables called <repository>_Node, <repository>_NodeType etc but still returns the same types of Node and NodeType sql entities.
+It's much easier to see what happens in the code by reading it. Try adding a breakpoint somewhere in the test-cases and see what the database looks like by using
+Microsoft SQL Management Studio
+
+<add more stuff here>
