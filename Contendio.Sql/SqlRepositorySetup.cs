@@ -23,7 +23,7 @@ namespace Contendio.Sql
 
         #endregion
 
-        public SqlRepositorySetup(string schema, string repository, string connectionString)
+        public SqlRepositorySetup(string repository, string connectionString)
         {
             this.DatabaseSchema = SqlUtils.SchemaNameFromConnectionString(connectionString);
             this.Repository = repository;

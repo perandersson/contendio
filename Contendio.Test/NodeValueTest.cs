@@ -19,7 +19,7 @@ namespace Contendio.Test
         {
             get
             {
-                return new SqlRepositorySetup(DatabaseSchema, "test", ConnectionString);
+                return new SqlRepositorySetup("test", ConnectionString);
             }
         }
 
@@ -58,6 +58,24 @@ namespace Contendio.Test
 
             Assert.AreEqual(2, values.Count);
             Assert.AreEqual("hello world!!!", values[0].ValueAsString());
+            Assert.AreEqual("goodbye world!!!", values[1].ValueAsString());
+        }
+
+        [TestMethod]
+        public void TestStringReplaceValue()
+        {
+            IContentRepository contentRepository = ContentRepository;
+
+            var rootNode = contentRepository.RootNode;
+            Assert.IsNotNull(rootNode);
+
+            rootNode.AddValue("mystringvalue", "hello world!!!");
+            rootNode.AddValue("mystringvalue2", "goodbye world!!!");
+            rootNode.AddValue("mystringvalue", "replacedValue!!!");
+            var values = rootNode.Values;
+
+            Assert.AreEqual(2, values.Count);
+            Assert.AreEqual("replacedValue!!!", values[0].ValueAsString());
             Assert.AreEqual("goodbye world!!!", values[1].ValueAsString());
         }
     }

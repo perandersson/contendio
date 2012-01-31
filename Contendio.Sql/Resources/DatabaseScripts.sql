@@ -84,7 +84,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[replaceme_StringValue](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Value] [text] NOT NULL,
+	[Value] [varchar](max) NOT NULL,
  CONSTRAINT [PK_replaceme_StringValue] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

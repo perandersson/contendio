@@ -13,6 +13,7 @@ namespace Contendio.Sql.Model
         public NodeValueEntity Entity { get; private set; }
         public SqlContentRepository ContentRepository { get; private set; }
         public SqlObserverManager ObserverManager { get; private set; }
+        public SqlQueryManager QueryManager { get; private set; }
 
         public SqlNodeValue()
         {
@@ -23,6 +24,7 @@ namespace Contendio.Sql.Model
             this.Entity = entity;
             this.ContentRepository = contentRepository;
             this.ObserverManager = contentRepository.ObserverManager as SqlObserverManager;
+            this.QueryManager = contentRepository.QueryManager as SqlQueryManager;
         }
 
         public long Id
@@ -55,7 +57,7 @@ namespace Contendio.Sql.Model
         {
             get
             {
-                var typeQuery = from nodeType in ContentRepository.NodeTypeQueryable where nodeType.Id.Equals(Entity.NodeTypeId) select nodeType;
+                var typeQuery = from nodeType in QueryManager.NodeTypeQueryable where nodeType.Id.Equals(Entity.NodeTypeId) select nodeType;
                 var type = typeQuery.FirstOrDefault();
                 return new SqlNodeType(type, ContentRepository);
             }
@@ -70,8 +72,7 @@ namespace Contendio.Sql.Model
             if (!Entity.StringValueId.HasValue)
                 return string.Empty;
 
-            var valueQuery = from value in ContentRepository.StringValueQueryable where value.Id.Equals(Entity.StringValueId.Value) select value;
-            var result = valueQuery.FirstOrDefault();
+            var result = QueryManager.GetStringValueById(Entity.StringValueId.Value);
             if (result == null)
                 return string.Empty;
 
@@ -83,8 +84,7 @@ namespace Contendio.Sql.Model
             if (!Entity.BinaryValueId.HasValue)
                 return null;
 
-            var valueQuery = from value in ContentRepository.BinaryValueQueryable where value.Id.Equals(Entity.BinaryValueId.Value) select value;
-            var result = valueQuery.FirstOrDefault();
+            var result = QueryManager.GetBinaryValueById(Entity.BinaryValueId.Value);
             if (result == null)
                 return null;
 
@@ -94,7 +94,14 @@ namespace Contendio.Sql.Model
 
         public DateTime? ValueAsDate()
         {
-            return null;
+            if (!Entity.DateValueId.HasValue)
+                return null;
+
+            var result = QueryManager.GetDateValueById(Entity.DateValueId.Value);
+            if (result == null)
+                return null;
+
+            return result.Value;
         }
     }
 }

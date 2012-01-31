@@ -16,7 +16,6 @@ namespace Contendio.Sql.Model
         public SqlQueryManager QueryManager { get; private set; }
         public NodeEntity Entity { get; private set; }
 
-
         public SqlNode()
         {
         }
@@ -60,7 +59,7 @@ namespace Contendio.Sql.Model
                 if (!Entity.NodeId.HasValue)
                     return null;
 
-                var parentQuery = from node in ContentRepository.NodeQueryable where node.Id.Equals(Entity.NodeId.Value) select node;
+                var parentQuery = from node in QueryManager.NodeQueryable where node.Id.Equals(Entity.NodeId.Value) select node;
                 var parent = parentQuery.FirstOrDefault();
 
                 if (parent == null)
@@ -78,7 +77,7 @@ namespace Contendio.Sql.Model
         {
             get
             {
-                var typeQuery = from nodeType in ContentRepository.NodeTypeQueryable where nodeType.Id.Equals(Entity.NodeTypeId) select nodeType;
+                var typeQuery = from nodeType in QueryManager.NodeTypeQueryable where nodeType.Id.Equals(Entity.NodeTypeId) select nodeType;
                 var type = typeQuery.FirstOrDefault();
                 return new SqlNodeType(type, ContentRepository);
             }
@@ -92,15 +91,13 @@ namespace Contendio.Sql.Model
         {
             get
             {
-                var valueQuery = from nodeValue in ContentRepository.NodeValueQueryable where nodeValue.NodeId.Equals(Entity.Id) select nodeValue;
-                var values = valueQuery.ToList();
-
-                List<INodeValue> result = new List<INodeValue>();
+                var values = QueryManager.GetNodeValuesForNode(Entity.Id);
+                var results = new List<INodeValue>();
                 foreach (var value in values)
                 {
-                    result.Add(new SqlNodeValue(value, ContentRepository));
+                    results.Add(new SqlNodeValue(value, ContentRepository));
                 }
-                return result;
+                return results;
             }
             set
             {
@@ -112,15 +109,13 @@ namespace Contendio.Sql.Model
         {
             get
             {
-                var childrenQuery = from node in ContentRepository.NodeQueryable where node.NodeId.HasValue && node.NodeId.Value.Equals(Id) select node;
-                var children = childrenQuery.ToList();
-
-                List<INode> nodes = new List<INode>();
+                var children = QueryManager.GetSubNodesForNode(Entity.Id);
+                var results = new List<INode>();
                 foreach (var child in children)
                 {
-                    nodes.Add(new SqlNode(child, ContentRepository));
+                    results.Add(new SqlNode(child, ContentRepository));
                 }
-                return nodes;
+                return results;
             }
             set
             {
@@ -161,7 +156,7 @@ namespace Contendio.Sql.Model
             var sqlNode = new NodeEntity();
             sqlNode.Name = name;
             sqlNode.NodeId = Entity.Id;
-            sqlNode.NodeTypeId = (new SqlEntityFactory(ContentRepository)).GetNodeType(type).Id;
+            sqlNode.NodeTypeId = QueryManager.GetNodeType(type).Id;
             sqlNode.AddedDate = DateTime.Now;
             sqlNode.ChangedDate = DateTime.Now;
 
@@ -171,7 +166,7 @@ namespace Contendio.Sql.Model
             string path = appendName + "/" + name;
 
             sqlNode.Path = path;
-            ContentRepository.Save(sqlNode);
+            QueryManager.Save(sqlNode);
 
             return new SqlNode(sqlNode, ContentRepository);
         }
@@ -181,7 +176,7 @@ namespace Contendio.Sql.Model
             string name = path.Replace("/", "");
 
             var id = Entity.Id;
-            var result = (from node in ContentRepository.NodeQueryable where node.NodeId.HasValue && node.NodeId.Value.Equals(id) && node.Name.Equals(name) select node);
+            var result = (from node in QueryManager.NodeQueryable where node.NodeId.HasValue && node.NodeId.Value.Equals(id) && node.Name.Equals(name) select node);
             var resultEntity = result.FirstOrDefault();
             if (resultEntity == null)
                 return null;
@@ -206,11 +201,12 @@ namespace Contendio.Sql.Model
 
                 var stringEntity = new StringValueEntity();
                 stringEntity.Value = value;
-                ContentRepository.Save(stringEntity);
+                QueryManager.Save(stringEntity);
 
-                valueEntity.StringValueId = stringEntity.Id;   
+                valueEntity.StringValueId = stringEntity.Id;
+                valueEntity.ChangedDate = DateTime.Now;
 
-                ContentRepository.Save(valueEntity);
+                QueryManager.Save(valueEntity);
                 transaction.Complete();
                 return new SqlNodeValue(valueEntity, ContentRepository);
             }
@@ -231,11 +227,12 @@ namespace Contendio.Sql.Model
 
                 var dateEntity = new DateValueEntity();
                 dateEntity.Value = date;
-                ContentRepository.Save(dateEntity);
+                QueryManager.Save(dateEntity);
 
-                valueEntity.DateValueId = dateEntity.Id;   
+                valueEntity.DateValueId = dateEntity.Id;
+                valueEntity.ChangedDate = DateTime.Now;
 
-                ContentRepository.Save(valueEntity);
+                QueryManager.Save(valueEntity);
                 transaction.Complete();
                 return new SqlNodeValue(valueEntity, ContentRepository);
             }
@@ -256,11 +253,12 @@ namespace Contendio.Sql.Model
 
                 var binaryEntity = new BinaryValueEntity();
                 binaryEntity.Value = array;
-                ContentRepository.Save(binaryEntity);
+                QueryManager.Save(binaryEntity);
 
-                valueEntity.BinaryValueId = binaryEntity.Id;                
-                
-                ContentRepository.Save(valueEntity);
+                valueEntity.BinaryValueId = binaryEntity.Id;
+                valueEntity.ChangedDate = DateTime.Now;
+
+                QueryManager.Save(valueEntity);
                 transaction.Complete();
                 return new SqlNodeValue(valueEntity, ContentRepository);
             }
@@ -271,9 +269,8 @@ namespace Contendio.Sql.Model
             var entity = new NodeValueEntity();
             entity.Name = name;
             entity.NodeId = Entity.Id;
-            entity.NodeTypeId = (new SqlEntityFactory(ContentRepository)).GetNodeType(type).Id;
+            entity.NodeTypeId = QueryManager.GetNodeType(type).Id;
             entity.AddedDate = DateTime.Now;
-            entity.ChangedDate = DateTime.Now;
             entity.StringValueId = null;
             entity.BinaryValueId = null;
             entity.DateValueId = null;
@@ -282,7 +279,7 @@ namespace Contendio.Sql.Model
         
         private NodeValueEntity CheckAndDeleteValue(string name)
         {
-            var checkForValue = from nodeValue in ContentRepository.NodeValueQueryable where nodeValue.NodeId == Id && nodeValue.Name.Equals(name) select nodeValue;
+            var checkForValue = from nodeValue in QueryManager.NodeValueQueryable where nodeValue.NodeId == Id && nodeValue.Name.Equals(name) select nodeValue;
             var valueEntity = checkForValue.FirstOrDefault();
             if (valueEntity != null)
             {

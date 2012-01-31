@@ -19,7 +19,7 @@ namespace Contendio.Test
         {
             get
             {
-                return new SqlRepositorySetup(DatabaseSchema, "test", ConnectionString);
+                return new SqlRepositorySetup("test", ConnectionString);
             }
         }
 

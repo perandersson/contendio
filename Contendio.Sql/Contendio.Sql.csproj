@@ -58,7 +58,6 @@
     <Compile Include="Mapping\RepositoryMetaTable.cs" />
     <Compile Include="Provider\RepositoryQueryable.cs" />
     <Compile Include="Provider\RepositorySqlProvider.cs" />
-    <Compile Include="SqlEntityFactory.cs" />
     <Compile Include="SqlObserverManager.cs" />
     <Compile Include="SqlQueryManager.cs" />
     <Compile Include="SqlRepositorySetup.cs" />
