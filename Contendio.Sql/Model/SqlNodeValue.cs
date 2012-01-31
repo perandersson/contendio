@@ -27,7 +27,7 @@ namespace Contendio.Sql.Model
             this.QueryManager = contentRepository.QueryManager as SqlQueryManager;
         }
 
-        public long Id
+        public Int64 Id
         {
             get
             {

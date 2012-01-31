@@ -11,7 +11,7 @@ namespace Contendio.Model
         /// <summary>
         /// The unique id of this node value
         /// </summary>
-        long Id { get; set; }
+        Int64 Id { get; set; }
 
         /// <summary>
         /// The name of the node value

@@ -59,10 +59,13 @@ namespace Contendio.Sql.Provider
                                       .ToArray());
             }
 
-            return isCollection
-                ? (TResult)queryResult // Returns an IEnumerable`1 collection.
-                : queryResult.OfType<TResult>()
-                             .SingleOrDefault(); // Returns a single item.
+            if (isCollection)
+                return (TResult)queryResult;
+            else
+            {
+                var tmp = queryResult.OfType<TResult>();
+                return tmp.SingleOrDefault();
+            }
         }
 
         public object Execute(Expression expression)

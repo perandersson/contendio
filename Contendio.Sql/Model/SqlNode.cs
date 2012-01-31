@@ -28,7 +28,7 @@ namespace Contendio.Sql.Model
             this.QueryManager = contentRepository.QueryManager as SqlQueryManager;
         }
 
-        public long Id
+        public Int64 Id
         {
             get
             {
@@ -185,6 +185,15 @@ namespace Contendio.Sql.Model
             return nodeModel;
         }
 
+        public void Delete()
+        {
+            QueryManager.Delete(Entity);
+        }
+
+        public void Delete(string path)
+        {
+            throw new NotImplementedException();
+        }
 
         public INodeValue AddValue(string name, string value)
         {
@@ -193,8 +202,8 @@ namespace Contendio.Sql.Model
 
         public INodeValue AddValue(string name, string value, string type)
         {
-            using (var transaction = new TransactionScope())
-            {
+          //  using (var transaction = new TransactionScope())
+          //  {
                 var valueEntity = CheckAndDeleteValue(name);
                 if (valueEntity == null)
                     valueEntity = CreateNewValueEntity(name, type);
@@ -207,9 +216,9 @@ namespace Contendio.Sql.Model
                 valueEntity.ChangedDate = DateTime.Now;
 
                 QueryManager.Save(valueEntity);
-                transaction.Complete();
+            //    transaction.Complete();
                 return new SqlNodeValue(valueEntity, ContentRepository);
-            }
+           // }
         }
 
         public INodeValue AddValue(string name, DateTime date)

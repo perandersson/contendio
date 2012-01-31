@@ -13,7 +13,7 @@ namespace Contendio.Sql.Entity
         /// 
         /// </summary>
         [Column(IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.OnInsert)]
-        public long Id { get; set; }
+        public Int64 Id { get; set; }
 
         [Column]
         public DateTime Value { get; set; }

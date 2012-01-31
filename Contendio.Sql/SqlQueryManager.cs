@@ -182,22 +182,22 @@ namespace Contendio.Sql
         private void Delete(ITable table, object entity)
         {
             table.DeleteOnSubmit(entity);
-            table.Context.SubmitChanges();
+            DataContext.SubmitChanges();
         }
 
-        public void DeleteBinaryValueById(long id)
+        public void DeleteBinaryValueById(Int64 id)
         {
             var value = GetBinaryValueById(id);
             Delete(value);
         }
 
-        public void DeleteDateValueById(long id)
+        public void DeleteDateValueById(Int64 id)
         {
             var value = GetDateValueById(id);
             Delete(value);
         }
 
-        public void DeleteStringValueById(long id)
+        public void DeleteStringValueById(Int64 id)
         {
             var value = GetStringValueById(id);
             Delete(value);
@@ -209,41 +209,41 @@ namespace Contendio.Sql
             return nodeType.FirstOrDefault();
         }
 
-        public NodeValueEntity GetNodeValueById(long id)
+        public NodeValueEntity GetNodeValueById(Int64 id)
         {
             var nodeValueQuery = from n in NodeValueQueryable where n.Id == id select n;
             return nodeValueQuery.FirstOrDefault();
         }
 
-        public IList<NodeValueEntity> GetNodeValuesForNode(long nodeId)
+        public IList<NodeValueEntity> GetNodeValuesForNode(Int64 nodeId)
         {
             var valueQuery = from nodeValue in NodeValueQueryable where nodeValue.NodeId.Equals(nodeId) select nodeValue;
             var values = valueQuery.ToList();
             return values;
         }
 
-        public IList<NodeEntity> GetSubNodesForNode(long nodeId)
+        public IList<NodeEntity> GetSubNodesForNode(Int64 nodeId)
         {
             var childrenQuery = from node in NodeQueryable where node.NodeId.HasValue && node.NodeId.Value.Equals(nodeId) select node;
             var children = childrenQuery.ToList();
             return children;
         }
 
-        public BinaryValueEntity GetBinaryValueById(long id)
+        public BinaryValueEntity GetBinaryValueById(Int64 id)
         {
             var valueQuery = from value in BinaryValueQueryable where value.Id.Equals(id) select value;
             var result = valueQuery.FirstOrDefault();
             return result;
         }
 
-        public StringValueEntity GetStringValueById(long id)
+        public StringValueEntity GetStringValueById(Int64 id)
         {
             var valueQuery = from value in StringValueQueryable where value.Id.Equals(id) select value;
             var result = valueQuery.FirstOrDefault();
             return result;
         }
 
-        public DateValueEntity GetDateValueById(long id)
+        public DateValueEntity GetDateValueById(Int64 id)
         {
             var valueQuery = from value in DateValueQueryable where value.Id.Equals(id) select value;
             var result = valueQuery.FirstOrDefault();

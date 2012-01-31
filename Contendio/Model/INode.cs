@@ -11,7 +11,7 @@ namespace Contendio.Model
         /// <summary>
         /// The unique identifier for this node.
         /// </summary>
-        long Id { get; set; }
+        Int64 Id { get; set; }
 
         /// <summary>
         /// The name of this node
@@ -69,6 +69,17 @@ namespace Contendio.Model
         /// <param name="path"></param>
         /// <returns></returns>
         INode GetNode(string path);
+
+        /// <summary>
+        /// Removes this node from the repository
+        /// </summary>
+        void Delete();
+
+        /// <summary>
+        /// Removes a node with the specific path
+        /// </summary>
+        /// <param name="path"></param>
+        void Delete(string path);
 
         /// <summary>
         /// Adds a string value to this node
