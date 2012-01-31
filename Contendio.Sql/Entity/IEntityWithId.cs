@@ -7,6 +7,6 @@ namespace Contendio.Sql.Entity
 {
     public interface IEntityWithId
     {
-        Guid Id { get; }
+        long Id { get; }
     }
 }

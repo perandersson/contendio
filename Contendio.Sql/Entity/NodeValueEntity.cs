@@ -14,7 +14,7 @@ namespace Contendio.Sql.Entity
         /// 
         /// </summary>
         [Column(IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.OnInsert)]
-        public Guid Id { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// 
@@ -26,24 +26,42 @@ namespace Contendio.Sql.Entity
         /// 
         /// </summary>
         [Column]
-        public Guid NodeTypeId { get; set; }
+        public int NodeTypeId { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         [Column]
-        public Guid? StringValueId { get; set; }
+        public long? StringValueId { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         [Column]
-        public Guid? BinaryValueId { get; set; }
+        public long? BinaryValueId { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         [Column]
-        public Guid NodeId { get; set; }
+        public long? DateValueId { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Column]
+        public long NodeId { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Column]
+        public DateTime AddedDate { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Column]
+        public DateTime ChangedDate { get; set; }
     }
 }

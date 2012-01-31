@@ -14,13 +14,7 @@ namespace Contendio.Sql.Entity
         /// 
         /// </summary>
         [Column(IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.OnInsert)]
-        public Guid Id { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [Column]
-        public Guid TypeId { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// 

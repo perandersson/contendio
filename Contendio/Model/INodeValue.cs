@@ -11,7 +11,7 @@ namespace Contendio.Model
         /// <summary>
         /// The unique id of this node value
         /// </summary>
-        Guid Id { get; set; }
+        long Id { get; set; }
 
         /// <summary>
         /// The name of the node value
@@ -46,5 +46,10 @@ namespace Contendio.Model
         /// <returns>A stream. The caller is responsible for closing the stream when the reading is done</returns>
         Stream ValueAsStream();
 
+        /// <summary>
+        /// Retrieves the date if it's a value id.
+        /// </summary>
+        /// <returns></returns>
+        DateTime? ValueAsDate();
     }
 }

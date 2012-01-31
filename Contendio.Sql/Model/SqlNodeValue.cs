@@ -18,14 +18,14 @@ namespace Contendio.Sql.Model
         {
         }
 
-        public SqlNodeValue(NodeValueEntity entity, SqlContentRepository contentRepository, SqlObserverManager observerManager)
+        public SqlNodeValue(NodeValueEntity entity, SqlContentRepository contentRepository)
         {
             this.Entity = entity;
             this.ContentRepository = contentRepository;
-            this.ObserverManager = observerManager;
+            this.ObserverManager = contentRepository.ObserverManager as SqlObserverManager;
         }
 
-        public Guid Id
+        public long Id
         {
             get
             {
@@ -89,6 +89,12 @@ namespace Contendio.Sql.Model
                 return null;
 
             return new MemoryStream(result.Value.ToArray());
+        }
+
+
+        public DateTime? ValueAsDate()
+        {
+            return null;
         }
     }
 }

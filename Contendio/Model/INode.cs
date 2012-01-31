@@ -11,7 +11,7 @@ namespace Contendio.Model
         /// <summary>
         /// The unique identifier for this node.
         /// </summary>
-        Guid Id { get; set; }
+        long Id { get; set; }
 
         /// <summary>
         /// The name of this node
@@ -31,12 +31,12 @@ namespace Contendio.Model
         /// <summary>
         /// The values of this node
         /// </summary>
-        ICollection<INodeValue> Values { get; set; }
+        IList<INodeValue> Values { get; set; }
 
         /// <summary>
         /// This nodes child nodes
         /// </summary>
-        ICollection<INode> Children { get; set; }
+        IList<INode> Children { get; set; }
 
         /// <summary>
         /// Event triggered when this- or a child node is changed somehow (added, deleted or simply updated)
@@ -69,5 +69,56 @@ namespace Contendio.Model
         /// <param name="path"></param>
         /// <returns></returns>
         INode GetNode(string path);
+
+        /// <summary>
+        /// Adds a string value to this node
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        INodeValue AddValue(string name, string value);
+
+        /// <summary>
+        /// Adds a string value to this node
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        INodeValue AddValue(string name, string value, string type);
+
+        /// <summary>
+        /// Adds a date value to this node
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        INodeValue AddValue(string name, DateTime date);
+
+        /// <summary>
+        /// Adds a date value to this node
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="date"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        INodeValue AddValue(string name, DateTime date, string type);
+
+        /// <summary>
+        /// Adds a binary value to this node
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        INodeValue AddValue(string name, byte[] array);
+
+        /// <summary>
+        /// Adds a binary value to this node
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="array"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        INodeValue AddValue(string name, byte[] array, string type);
     }
 }

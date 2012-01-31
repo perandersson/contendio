@@ -45,18 +45,6 @@ namespace Contendio.Test
         }
 
         [TestMethod]
-        public void TestRepositoryInstallation()
-        {
-            IContentRepository contentRepository = ContentRepository;
-
-            var rootNode = contentRepository.RootNode;
-            Assert.IsNotNull(rootNode);
-            Assert.AreEqual("/", rootNode.Path);
-            Assert.IsNotNull(rootNode.NodeType);
-            Assert.AreEqual("node:root", rootNode.NodeType.Name);
-        }
-
-        [TestMethod]
         public void TestAddChildNode()
         {
             IContentRepository contentRepository = ContentRepository;
@@ -71,8 +59,9 @@ namespace Contendio.Test
 
             var childNode = rootNode.GetNode("childNode1");
             Assert.IsNotNull(childNode);
-            Assert.AreEqual(childNode.Path, "/childNode1");
-            Assert.AreEqual(childNode.Name, "childNode1");
+            Assert.AreEqual("/childNode1", childNode.Path);
+            Assert.AreEqual("childNode1", childNode.Name);
+            Assert.AreEqual("node:node", childNode.NodeType.Name);
         }
 
         [TestMethod]
@@ -89,15 +78,25 @@ namespace Contendio.Test
                 transaction.Complete();
             }
 
+            Assert.AreEqual(2, rootNode.Children.Count);
+
             var childNode = rootNode.GetNode("childNode1");
             Assert.IsNotNull(childNode);
             Assert.AreEqual("/childNode1", childNode.Path);
             Assert.AreEqual("childNode1", childNode.Name);
 
+            Assert.AreEqual(childNode.Id, rootNode.Children[0].Id);
+            Assert.AreEqual(childNode.Name, rootNode.Children[0].Name);
+            Assert.AreEqual(childNode.ParentNode.Id, rootNode.Children[0].ParentNode.Id);
+
             childNode = rootNode.GetNode("childNode2");
             Assert.IsNotNull(childNode);
             Assert.AreEqual("/childNode2", childNode.Path);
             Assert.AreEqual("childNode2", childNode.Name);
+
+            Assert.AreEqual(childNode.Id, rootNode.Children[1].Id);
+            Assert.AreEqual(childNode.Name, rootNode.Children[1].Name);
+            Assert.AreEqual(childNode.ParentNode.Id, rootNode.Children[1].ParentNode.Id);
         }
 
         [TestMethod]
@@ -113,11 +112,13 @@ namespace Contendio.Test
                 rootNode.AddNode("childNode2");
                 transaction.Complete();
             }
+            Assert.AreEqual(2, rootNode.Children.Count);
 
             var childNode = rootNode.GetNode("childNode1");
             Assert.IsNotNull(childNode);
             Assert.AreEqual("/childNode1", childNode.Path);
             Assert.AreEqual("childNode1", childNode.Name);
+            Assert.AreEqual(0, childNode.Children.Count);
 
             using (var transaction = new TransactionScope())
             {
@@ -129,39 +130,35 @@ namespace Contendio.Test
             Assert.IsNotNull(childNode);
             Assert.AreEqual("/childNode1/subChildNode1", childNode.Path);
             Assert.AreEqual("subChildNode1", childNode.Name);
-        }
+            Assert.AreEqual(1, childNode.Children.Count);
 
-        /*
-        [TestMethod]
-        public void TryToSaveSameNodeTwice()
-        {
-            IContentRepository contentRepository = ContentRepository;
             using (var transaction = new TransactionScope())
             {
-                var rootNode = contentRepository.RootNode;
-                Assert.IsNotNull(rootNode);
+                rootNode.AddNode("childNode1/subChildNode1/subsubChildNode1");
+                transaction.Complete();
+            }
+        }
 
+        [TestMethod]
+        public void TestAddSameNodeTwice()
+        {
+            IContentRepository contentRepository = ContentRepository;
+            var rootNode = contentRepository.RootNode;
+            Assert.IsNotNull(rootNode);
+
+            using (var transaction = new TransactionScope())
+            {
                 rootNode.AddNode("childNode1");
                 rootNode.AddNode("childNode1");
                 transaction.Complete();
             }
 
-            using (var transaction = new TransactionScope())
-            {
-                var rootNode = contentRepository.RootNode;
-                Assert.IsNotNull(rootNode);
+            var rootNodeCollection = rootNode.Children;
+            Assert.IsNotNull(rootNodeCollection);
+            Assert.AreEqual(2, rootNodeCollection.Count);
 
-                var node = rootNode.GetNode("childNode1");
-                Assert.IsNotNull(node);
-                Assert.AreEqual(node.Path, "/childNode1");
-                Assert.AreEqual(node.Name, "childNode1");
-
-                node = rootNode.GetNode("childNode1_0");
-                Assert.IsNotNull(node);
-                Assert.AreEqual(node.Path, "/childNode1_0");
-                Assert.AreEqual(node.Name, "childNode1_0");
-            }
+            Assert.AreEqual("childNode1", rootNodeCollection[0].Name);
+            Assert.AreEqual("childNode1", rootNodeCollection[1].Name);
         }
-         * */
     }
 }

@@ -55,6 +55,7 @@ namespace Contendio.Sql
             batches.Add("DROP TABLE [dbo].[" + Repository + "_NodeValue]");
             batches.Add("DROP TABLE [dbo].[" + Repository + "_StringValue]");
             batches.Add("DROP TABLE [dbo].[" + Repository + "_BinaryValue]");
+            batches.Add("DROP TABLE [dbo].[" + Repository + "_DateValue]");
             batches.Add("DROP TABLE [dbo].[" + Repository + "_Node]");
             batches.Add("DROP TABLE [dbo].[" + Repository + "_NodeType]");
             ExecuteBatches(batches);

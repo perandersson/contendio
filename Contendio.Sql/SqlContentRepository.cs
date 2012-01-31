@@ -48,7 +48,7 @@ namespace Contendio.Sql
             get
             {
                 var node = from n in NodeQueryable where n.NodeId == null select n;
-                return new SqlNode(node.FirstOrDefault(), this, ObserverManager);
+                return new SqlNode(node.FirstOrDefault(), this);
             }
 
         }
@@ -59,6 +59,7 @@ namespace Contendio.Sql
         private Table<NodeValueEntity> nodeValueTable;
         private Table<BinaryValueEntity> binaryValueTable;
         private Table<StringValueEntity> stringValueTable;
+        private Table<DateValueEntity> dateValueTable;
         private Table<NodeTypeEntity> nodeTypeTable;
 
         #endregion
@@ -74,6 +75,7 @@ namespace Contendio.Sql
             this.nodeTable = DataContext.GetTable<NodeEntity>();
             this.stringValueTable = DataContext.GetTable<StringValueEntity>();
             this.binaryValueTable = DataContext.GetTable<BinaryValueEntity>();
+            this.dateValueTable = DataContext.GetTable<DateValueEntity>();
             this.nodeValueTable = DataContext.GetTable<NodeValueEntity>();
         }
 
@@ -97,12 +99,32 @@ namespace Contendio.Sql
             Save(stringValueTable, stringValue);
         }
 
+        public void Save(DateValueEntity dateValue)
+        {
+            Save(dateValueTable, dateValue);
+        }
+
         public void Save(NodeTypeEntity nodeType)
         {
             Save(nodeTypeTable, nodeType);
         }
 
         private void Save(ITable table, IEntityWithId entity)
+        {
+            if (entity.Id == 0)
+            {
+                table.InsertOnSubmit(entity);
+            }
+            else if (table.GetOriginalEntityState(entity) == null)
+            {
+                table.Attach(entity);
+                table.Context.Refresh(RefreshMode.KeepCurrentValues, entity);
+            }
+
+            table.Context.SubmitChanges();
+        }
+
+        private void Save(ITable table, NodeTypeEntity entity)
         {
             if (entity.Id.Equals(Guid.Empty))
             {
@@ -140,6 +162,11 @@ namespace Contendio.Sql
         public void Delete(NodeTypeEntity nodeType)
         {
             Delete(nodeTypeTable, nodeType);
+        }
+
+        public void Delete(DateValueEntity dateValue)
+        {
+            Delete(dateValueTable, dateValue);
         }
 
         private void Delete(ITable table, object entity)

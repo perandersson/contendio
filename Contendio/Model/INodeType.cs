@@ -10,7 +10,7 @@ namespace Contendio.Model
         /// <summary>
         /// The unique id of this node type
         /// </summary>
-        Guid Id { get; set; }
+        int Id { get; set; }
 
         /// <summary>
         /// The name of this node type.

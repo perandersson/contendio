@@ -7,13 +7,13 @@ using System.Data.Linq.Mapping;
 namespace Contendio.Sql.Entity
 {
     [Table(Name = "replaceme_NodeType")]
-    public class NodeTypeEntity : IEntityWithId
+    public class NodeTypeEntity
     {
         /// <summary>
         /// 
         /// </summary>
         [Column(IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.OnInsert)]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// The name of the current node

@@ -16,7 +16,7 @@ namespace Contendio.Sql.Entity
         /// 
         /// </summary>
         [Column(IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.OnInsert)]
-        public Guid Id { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// The name of the current node
@@ -34,12 +34,24 @@ namespace Contendio.Sql.Entity
         /// 
         /// </summary>
         [Column(CanBeNull = true)]
-        public Guid? NodeId { get; set; }
+        public long? NodeId { get; set; }
 
         /// <summary>
         /// The id of this nodes type
         /// </summary>
         [Column]
-        public Guid NodeTypeId { get; set; }
+        public int NodeTypeId { get; set; }
+
+        /// <summary>
+        /// The date when this node is added into the database
+        /// </summary>
+        [Column]
+        public DateTime AddedDate { get; set; }
+
+        /// <summary>
+        /// The date when this node is changed
+        /// </summary>
+        [Column]
+        public DateTime ChangedDate { get; set; }
     }
 }

@@ -22,5 +22,17 @@ namespace Contendio.Sql
         {
             get { throw new NotImplementedException(); }
         }
+
+        public void DeleteBinaryValueById(long id)
+        {
+        }
+
+        public void DeleteDateValueById(long id)
+        {
+        }
+
+        public void DeleteStringValueById(long id)
+        {
+        }
     }
 }

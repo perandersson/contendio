@@ -50,6 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContentRepositoryTest.cs" />
+    <Compile Include="NodeValueTest.cs" />
+    <Compile Include="InstallAndUninstallTest.cs" />
     <Compile Include="UtilsTest.cs" />
     <Compile Include="EventTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

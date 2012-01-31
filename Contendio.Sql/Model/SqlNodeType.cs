@@ -22,7 +22,7 @@ namespace Contendio.Sql.Model
             this.ContentRepository = contentRepository;
         }
 
-        public Guid Id
+        public int Id
         {
             get
             {
