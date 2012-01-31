@@ -23,19 +23,9 @@ namespace Contendio
         INode RootNode { get; }
 
         /// <summary>
-        /// Retrieves a queryable object from the repository. Use this to perform LINQ commands
+        /// 
         /// </summary>
-        IQueryable<INode> NodeQueryable { get; }
-
-        /// <summary>
-        /// Retrieves a queryable object from the repository. Use this to perform LINQ commands
-        /// </summary>
-        IQueryable<INodeValue> NodeValueQueryable { get; }
-
-        /// <summary>
-        /// Retrieves a queryable object from the repository. Use this to perform LINQ commands
-        /// </summary>
-        IQueryable<INodeType> NodeTypeQueryable { get; }
+        IQueryManager QueryManager { get; }
 
         /// <summary>
         /// Saves the node entity into the database

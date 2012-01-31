@@ -53,7 +53,7 @@ namespace Contendio.Test
             Assert.IsNotNull(rootNode);
             Assert.AreEqual("/", rootNode.Path);
             Assert.IsNotNull(rootNode.NodeType);
-            Assert.AreEqual("node:rootnode", rootNode.NodeType.Name);
+            Assert.AreEqual("node:root", rootNode.NodeType.Name);
         }
 
         [TestMethod]

@@ -15,7 +15,7 @@ namespace Contendio.Sql
     public class SqlContentRepository : IContentRepository
     {
         public string Repository { get; private set; }
-        public IObserverManager ObserverManager { get; private set; }
+        public SqlObserverManager ObserverManager { get; private set; }
         private DataContext DataContext { get; set; }
 
         public IQueryable<NodeEntity> NodeQueryable
@@ -155,22 +155,6 @@ namespace Contendio.Sql
             return source;
         }
 
-
-        IQueryable<INode> IContentRepository.NodeQueryable
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        IQueryable<INodeValue> IContentRepository.NodeValueQueryable
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        IQueryable<INodeType> IContentRepository.NodeTypeQueryable
-        {
-            get { throw new NotImplementedException(); }
-        }
-
         public void Save(INode node)
         {
             throw new NotImplementedException();
@@ -199,6 +183,11 @@ namespace Contendio.Sql
         public void Delete(INodeType nodeType)
         {
             throw new NotImplementedException();
+        }
+
+        public IQueryManager QueryManager
+        {
+            get { return new SqlQueryManager(); }
         }
     }
 }

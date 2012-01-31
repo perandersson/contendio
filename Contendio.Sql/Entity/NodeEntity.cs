@@ -10,11 +10,8 @@ namespace Contendio.Sql.Entity
     [Table(Name = "replaceme_Node")]
     public class NodeEntity : IEntityWithId
     {
-        private EntityRef<NodeEntity> _parentNode;
-        private EntityRef<NodeTypeEntity> _nodeType;
-        private EntitySet<NodeValueEntity> _nodeValue = new EntitySet<NodeValueEntity>();
         private string _path = String.Empty;
-
+        
         /// <summary>
         /// 
         /// </summary>
@@ -44,53 +41,5 @@ namespace Contendio.Sql.Entity
         /// </summary>
         [Column]
         public Guid NodeTypeId { get; set; }
-
-        /// <summary>
-        /// Retrieves the parent node for this node object
-        /// </summary>
-        [Association(Storage = "_parentNode", ThisKey = "NodeId", OtherKey = "Id", IsForeignKey = true)]
-        public NodeEntity ParentNode
-        {
-            get
-            {
-                return _parentNode.Entity;
-            }
-            set
-            {
-                _parentNode.Entity = value;
-            }
-        }
-
-        /// <summary>
-        /// Retrieves all node data for this node
-        /// </summary>
-        [Association(Storage = "_nodeValue", ThisKey = "Id", OtherKey = "NodeId")]
-        public EntitySet<NodeValueEntity> NodeValue
-        {
-            get
-            {
-                return _nodeValue;
-            }
-            set
-            {
-                _nodeValue.Assign(value);
-            }
-        }
-
-        /// <summary>
-        /// Retrieves the parent node for this node object
-        /// </summary>
-        [Association(Storage = "_nodeType", ThisKey = "NodeTypeId", OtherKey = "Id", IsForeignKey = true)]
-        public NodeTypeEntity NodeType
-        {
-            get
-            {
-                return _nodeType.Entity;
-            }
-            set
-            {
-                _nodeType.Entity = value;
-            }
-        }
     }
 }

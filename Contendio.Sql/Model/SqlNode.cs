@@ -11,17 +11,17 @@ namespace Contendio.Sql.Model
     public class SqlNode : INode
     {
         public SqlContentRepository ContentRepository { get; private set; }
-        public IObserverManager ObserverManager { get; private set; }
-        public NodeEntity Original { get; private set; }
+        public SqlObserverManager ObserverManager { get; private set; }
+        public NodeEntity Entity { get; private set; }
 
 
         public SqlNode()
         {
         }
 
-        public SqlNode(NodeEntity original, SqlContentRepository contentRepository, IObserverManager observerManager)
+        public SqlNode(NodeEntity entity, SqlContentRepository contentRepository, SqlObserverManager observerManager)
         {
-            this.Original = original;
+            this.Entity = entity;
             this.ContentRepository = contentRepository;
             this.ObserverManager = observerManager;
         }
@@ -30,11 +30,11 @@ namespace Contendio.Sql.Model
         {
             get
             {
-                return Original.Id;
+                return Entity.Id;
             }
             set
             {
-                Original.Id = value;
+                Entity.Id = value;
             }
         }
 
@@ -42,11 +42,11 @@ namespace Contendio.Sql.Model
         {
             get
             {
-                return Original.Name;
+                return Entity.Name;
             }
             set
             {
-                Original.Name = value;
+                Entity.Name = value;
             }
         }
 
@@ -54,10 +54,16 @@ namespace Contendio.Sql.Model
         {
             get
             {
-                if (Original.ParentNode == null)
+                if (!Entity.NodeId.HasValue)
                     return null;
 
-                return new SqlNode(Original.ParentNode, ContentRepository, ObserverManager);
+                var parentQuery = from node in ContentRepository.NodeQueryable where node.Id.Equals(Entity.NodeId.Value) select node;
+                var parent = parentQuery.FirstOrDefault();
+
+                if (parent == null)
+                    return null;
+
+                return new SqlNode(parent, ContentRepository, ObserverManager);
             }
             set
             {
@@ -69,7 +75,9 @@ namespace Contendio.Sql.Model
         {
             get
             {
-                return new SqlNodeType(Original.NodeType, ContentRepository);
+                var typeQuery = from nodeType in ContentRepository.NodeTypeQueryable where nodeType.Id.Equals(Entity.NodeTypeId) select nodeType;
+                var type = typeQuery.FirstOrDefault();
+                return new SqlNodeType(type, ContentRepository);
             }
             set
             {
@@ -121,7 +129,7 @@ namespace Contendio.Sql.Model
 
         public string Path
         {
-            get { return Original.Path; }
+            get { return Entity.Path; }
         }
 
         public INode AddNode(string name)
@@ -133,7 +141,7 @@ namespace Contendio.Sql.Model
         {
             var sqlNode = new NodeEntity();
             sqlNode.Name = name;
-            sqlNode.NodeId = Original.Id;
+            sqlNode.NodeId = Entity.Id;
             sqlNode.NodeTypeId = (new SqlEntityFactory(ContentRepository)).GetNodeType(type).Id;
             sqlNode.Path = CalculatePath(false);
             ContentRepository.Save(sqlNode);
@@ -143,11 +151,11 @@ namespace Contendio.Sql.Model
 
         private string CalculatePath(bool appendSlash)
         {
-            if (!Original.NodeId.HasValue)
+            if (!Entity.NodeId.HasValue)
                 return "/";
 
             string path = this.Name;
-            path = Original.Path + "/" + path;
+            path = Entity.Path + "/" + path;
             return path;
         }
 
@@ -155,7 +163,7 @@ namespace Contendio.Sql.Model
         {
             string name = path.Replace("/", "");
 
-            var id = Original.Id;
+            var id = Entity.Id;
             var result = (from node in ContentRepository.NodeQueryable where node.NodeId.HasValue && node.NodeId.Value.Equals(id) && node.Name.Equals(name) select node);
             var resultEntity = result.FirstOrDefault();
             if (resultEntity == null)

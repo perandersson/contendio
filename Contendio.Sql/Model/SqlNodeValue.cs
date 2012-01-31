@@ -10,17 +10,17 @@ namespace Contendio.Sql.Model
 {
     public class SqlNodeValue : INodeValue
     {
-        public NodeValueEntity Original { get; private set; }
+        public NodeValueEntity Entity { get; private set; }
         public SqlContentRepository ContentRepository { get; private set; }
-        public IObserverManager ObserverManager { get; private set; }
+        public SqlObserverManager ObserverManager { get; private set; }
 
         public SqlNodeValue()
         {
         }
 
-        public SqlNodeValue(NodeValueEntity original, SqlContentRepository contentRepository, IObserverManager observerManager)
+        public SqlNodeValue(NodeValueEntity entity, SqlContentRepository contentRepository, SqlObserverManager observerManager)
         {
-            this.Original = original;
+            this.Entity = entity;
             this.ContentRepository = contentRepository;
             this.ObserverManager = observerManager;
         }
@@ -29,11 +29,11 @@ namespace Contendio.Sql.Model
         {
             get
             {
-                return Original.Id;
+                return Entity.Id;
             }
             set
             {
-                Original.Id = value;
+                Entity.Id = value;
             }
         }
 
@@ -41,27 +41,23 @@ namespace Contendio.Sql.Model
         {
             get
             {
-                return Original.Name;
+                return Entity.Name;
             }
             set
             {
-                Original.Name = value;
+                Entity.Name = value;
             }
         }
 
-        public INode ParentNode
-        {
-            get
-            {
-                return new SqlNode(Original.ParentNode, ContentRepository, ObserverManager);
-            }
-        }
+        public INode ParentNode { get; set; }
 
         public INodeType NodeType
         {
             get
             {
-                return new SqlNodeType(Original.NodeType, ContentRepository);
+                var typeQuery = from nodeType in ContentRepository.NodeTypeQueryable where nodeType.Id.Equals(Entity.NodeTypeId) select nodeType;
+                var type = typeQuery.FirstOrDefault();
+                return new SqlNodeType(type, ContentRepository);
             }
             set
             {
@@ -71,22 +67,28 @@ namespace Contendio.Sql.Model
 
         public string ValueAsString()
         {
-            if (Original.StringValueId.HasValue)
-            {
-                return Original.StringValue.Value;
-            }
+            if (!Entity.StringValueId.HasValue)
+                return string.Empty;
 
-            return string.Empty;
+            var valueQuery = from value in ContentRepository.StringValueQueryable where value.Id.Equals(Entity.StringValueId.Value) select value;
+            var result = valueQuery.FirstOrDefault();
+            if (result == null)
+                return string.Empty;
+
+            return result.Value;
         }
 
         public System.IO.Stream ValueAsStream()
         {
-            if (Original.BinaryValueId.HasValue)
-            {
-                return new MemoryStream(Original.BinaryValue.Value.ToArray());
-            }
+            if (!Entity.BinaryValueId.HasValue)
+                return null;
 
-            return null;
+            var valueQuery = from value in ContentRepository.BinaryValueQueryable where value.Id.Equals(Entity.BinaryValueId.Value) select value;
+            var result = valueQuery.FirstOrDefault();
+            if (result == null)
+                return null;
+
+            return new MemoryStream(result.Value.ToArray());
         }
     }
 }
