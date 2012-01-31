@@ -143,20 +143,16 @@ namespace Contendio.Sql.Model
             sqlNode.Name = name;
             sqlNode.NodeId = Entity.Id;
             sqlNode.NodeTypeId = (new SqlEntityFactory(ContentRepository)).GetNodeType(type).Id;
-            sqlNode.Path = CalculatePath(false);
+
+            string appendName = Path;
+            if (!Entity.NodeId.HasValue)
+                appendName = "";
+            string path = appendName + "/" + name;
+
+            sqlNode.Path = path;
             ContentRepository.Save(sqlNode);
 
             return new SqlNode(sqlNode, ContentRepository, ObserverManager);
-        }
-
-        private string CalculatePath(bool appendSlash)
-        {
-            if (!Entity.NodeId.HasValue)
-                return "/";
-
-            string path = this.Name;
-            path = Entity.Path + "/" + path;
-            return path;
         }
 
         public INode GetNode(string path)

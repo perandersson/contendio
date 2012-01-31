@@ -65,7 +65,7 @@ namespace Contendio.Test
 
             using (var transaction = new TransactionScope())
             {
-                rootNode.AddNode("childNode1");
+                var tmp = rootNode.AddNode("childNode1");
                 transaction.Complete();
             }
 
@@ -91,13 +91,13 @@ namespace Contendio.Test
 
             var childNode = rootNode.GetNode("childNode1");
             Assert.IsNotNull(childNode);
-            Assert.AreEqual(childNode.Path, "/childNode1");
-            Assert.AreEqual(childNode.Name, "childNode1");
+            Assert.AreEqual("/childNode1", childNode.Path);
+            Assert.AreEqual("childNode1", childNode.Name);
 
             childNode = rootNode.GetNode("childNode2");
             Assert.IsNotNull(childNode);
-            Assert.AreEqual(childNode.Path, "/childNode2");
-            Assert.AreEqual(childNode.Name, "childNode2");
+            Assert.AreEqual("/childNode2", childNode.Path);
+            Assert.AreEqual("childNode2", childNode.Name);
         }
 
         [TestMethod]
@@ -116,8 +116,8 @@ namespace Contendio.Test
 
             var childNode = rootNode.GetNode("childNode1");
             Assert.IsNotNull(childNode);
-            Assert.AreEqual(childNode.Path, "/childNode1");
-            Assert.AreEqual(childNode.Name, "childNode1");
+            Assert.AreEqual("/childNode1", childNode.Path);
+            Assert.AreEqual("childNode1", childNode.Name);
 
             using (var transaction = new TransactionScope())
             {
@@ -127,8 +127,8 @@ namespace Contendio.Test
 
             childNode = childNode.GetNode("subChildNode1");
             Assert.IsNotNull(childNode);
-            Assert.AreEqual(childNode.Path, "/childNode1/subChildNode1");
-            Assert.AreEqual(childNode.Name, "subChildNode1");
+            Assert.AreEqual("/childNode1/subChildNode1", childNode.Path);
+            Assert.AreEqual("subChildNode1", childNode.Name);
         }
 
         /*
