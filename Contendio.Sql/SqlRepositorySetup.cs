@@ -14,7 +14,7 @@ namespace Contendio.Sql
 {
     public class SqlRepositorySetup : IRepositorySetup
     {
-        public string Repository { get; private set; }
+        public string Workspace { get; private set; }
         public string DatabaseSchema { get; private set; }
 
         #region Private Members
@@ -23,10 +23,10 @@ namespace Contendio.Sql
 
         #endregion
 
-        public SqlRepositorySetup(string repository, string connectionString)
+        public SqlRepositorySetup(string workspace, string connectionString)
         {
             this.DatabaseSchema = SqlUtils.SchemaNameFromConnectionString(connectionString);
-            this.Repository = repository;
+            this.Workspace = workspace;
             this.connectionString = connectionString;
         }
 
@@ -40,7 +40,7 @@ namespace Contendio.Sql
             using (var connection = new SqlConnection(this.connectionString))
             {
                 connection.Open();
-                using (var command = new SqlCommand("SELECT COUNT(*) as num FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '" + Repository + "_Node'", connection))
+                using (var command = new SqlCommand("SELECT COUNT(*) as num FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '" + Workspace + "_Node'", connection))
                 {
                     var count = (int)command.ExecuteScalar();
                     return count > 0;
@@ -52,12 +52,12 @@ namespace Contendio.Sql
         {
             List<string> batches = new List<string>();
             batches.Add("USE [" + DatabaseSchema + "]");
-            batches.Add("DROP TABLE [dbo].[" + Repository + "_NodeValue]");
-            batches.Add("DROP TABLE [dbo].[" + Repository + "_StringValue]");
-            batches.Add("DROP TABLE [dbo].[" + Repository + "_BinaryValue]");
-            batches.Add("DROP TABLE [dbo].[" + Repository + "_DateValue]");
-            batches.Add("DROP TABLE [dbo].[" + Repository + "_Node]");
-            batches.Add("DROP TABLE [dbo].[" + Repository + "_NodeType]");
+            batches.Add("DROP TABLE [dbo].[" + Workspace + "_NodeValue]");
+            batches.Add("DROP TABLE [dbo].[" + Workspace + "_StringValue]");
+            batches.Add("DROP TABLE [dbo].[" + Workspace + "_BinaryValue]");
+            batches.Add("DROP TABLE [dbo].[" + Workspace + "_DateValue]");
+            batches.Add("DROP TABLE [dbo].[" + Workspace + "_Node]");
+            batches.Add("DROP TABLE [dbo].[" + Workspace + "_NodeType]");
             ExecuteBatches(batches);
         }
 
@@ -119,7 +119,7 @@ namespace Contendio.Sql
             using (var textStreamReader = new StreamReader(resourceStream))
             {
                 string scripts = textStreamReader.ReadToEnd();
-                return scripts.Replace("replaceme_", Repository + "_");
+                return scripts.Replace("replaceme_", Workspace + "_");
             }
         }
     }

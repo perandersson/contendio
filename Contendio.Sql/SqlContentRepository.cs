@@ -14,7 +14,7 @@ namespace Contendio.Sql
 {
     public class SqlContentRepository : IContentRepository
     {
-        public string Repository { get; private set; }
+        public string Workspace { get; private set; }
         public SqlObserverManager ObserverManager { get { return _observerManager; } }
         public DataContext DataContext { get; private set; }
         public IQueryManager QueryManager { get { return _queryManager; } }
@@ -35,13 +35,13 @@ namespace Contendio.Sql
             }
         }
 
-        public SqlContentRepository(string repository, string connectionString)
+        public SqlContentRepository(string workspace, string connectionString)
         {            
-            this.Repository = repository;
+            this.Workspace = workspace;
             this._observerManager = new SqlObserverManager();
 
-            DataContext = new DataContext(connectionString, new RepositoryMappingSource(Repository));
-            this._queryManager = new SqlQueryManager(repository, DataContext);
+            DataContext = new DataContext(connectionString, new RepositoryMappingSource(Workspace));
+            this._queryManager = new SqlQueryManager(workspace, DataContext);
         }
 
 

@@ -8,20 +8,20 @@ namespace Contendio.Sql.Provider
 {
     public class RepositoryQueryable<TSource> : IOrderedQueryable<TSource>
     {
-        public string Repository { get; set; }
+        public string Workspace { get; set; }
         public Expression Expression { get; private set; }
         public IQueryProvider Provider { get; private set; }
 
-        public RepositoryQueryable(string Repository, IQueryProvider provider, IQueryable<TSource> innerSource)
+        public RepositoryQueryable(string workspace, IQueryProvider provider, IQueryable<TSource> innerSource)
         {
-            this.Repository = Repository;
+            this.Workspace = workspace;
             this.Provider = provider;
             this.Expression = Expression.Constant(innerSource);
         }
 
-         public RepositoryQueryable(string Repository, IQueryProvider provider, Expression expression)
+         public RepositoryQueryable(string workspace, IQueryProvider provider, Expression expression)
          {
-            this.Repository = Repository;
+            this.Workspace = workspace;
             this.Provider = provider;
             this.Expression = expression;
         }

@@ -11,11 +11,11 @@ namespace Contendio.Sql.Mapping
         private RepositoryMappingSource mappingSource;
         private MetaModel attributeMetaModel;
         private Dictionary<Type, MetaTable> cachedMetaTables = new Dictionary<Type, MetaTable>();
-        private string repository;
+        private string workspace;
 
-        public RepositoryMetaModel(string repository, RepositoryMappingSource mappingSource, MetaModel attributeMetaModel)
+        public RepositoryMetaModel(string workspace, RepositoryMappingSource mappingSource, MetaModel attributeMetaModel)
         {
-            this.repository = repository;
+            this.workspace = workspace;
             this.mappingSource = mappingSource;
             this.attributeMetaModel = attributeMetaModel;
         }
@@ -57,7 +57,7 @@ namespace Contendio.Sql.Mapping
                 var originalMetaTable = attributeMetaModel.GetTable(rowType);
                 lock (cachedMetaTables)
                 {
-                    metaTable = new RepositoryMetaTable(repository, originalMetaTable, this);
+                    metaTable = new RepositoryMetaTable(workspace, originalMetaTable, this);
                     cachedMetaTables.Add(rowType, metaTable);
                 }
             }

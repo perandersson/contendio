@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entity\DateValueEntity.cs" />
+    <Compile Include="Mapping\RepositoryMetaType.cs" />
     <Compile Include="SqlUtils.cs" />
     <Compile Include="Entity\BinaryValueEntity.cs" />
     <Compile Include="Entity\IEntityWithId.cs" />

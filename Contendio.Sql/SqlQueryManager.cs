@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using Contendio.Model;
@@ -12,7 +14,7 @@ namespace Contendio.Sql
     public class SqlQueryManager : IQueryManager
     {
         public DataContext DataContext { get; private set; }
-        public string Repository { get; private set; }
+        public string Workspace { get; private set; }
 
         #region Private members
 
@@ -25,9 +27,9 @@ namespace Contendio.Sql
 
         #endregion
 
-        public SqlQueryManager(string repository, DataContext dataContext)
+        public SqlQueryManager(string workspace, DataContext dataContext)
         {
-            this.Repository = repository;
+            this.Workspace = workspace;
             this.DataContext = dataContext;
             this.nodeTypeTable = DataContext.GetTable<NodeTypeEntity>();
             this.nodeTable = DataContext.GetTable<NodeEntity>();
@@ -84,8 +86,8 @@ namespace Contendio.Sql
 
         private IQueryable<TSource> GetQueryable<TSource>(ITable<TSource> table) where TSource : class
         {
-            IQueryProvider provider = new RepositorySqlProvider(Repository, DataContext.GetCommand, DataContext.ExecuteQuery);
-            IQueryable<TSource> source = new RepositoryQueryable<TSource>(Repository, provider, table);
+            IQueryProvider provider = new RepositorySqlProvider(Workspace, DataContext.GetCommand, DataContext.ExecuteQuery);
+            IQueryable<TSource> source = new RepositoryQueryable<TSource>(Workspace, provider, table);
             return source;
         }
 

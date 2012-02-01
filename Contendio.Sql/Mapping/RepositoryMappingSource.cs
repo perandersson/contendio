@@ -8,18 +8,19 @@ namespace Contendio.Sql.Mapping
 {
     public class RepositoryMappingSource : MappingSource
     {
-        public string Repository { get; set; }
+        public string Workspace { get; set; }
         private AttributeMappingSource attributeMappingSource = new AttributeMappingSource();
 
-        public RepositoryMappingSource(string repository) : base()
+        public RepositoryMappingSource(string workspace)
+            : base()
         {
-            this.Repository = repository;
+            this.Workspace = workspace;
         }
 
         protected override MetaModel CreateModel(Type dataContextType)
         {
             MetaModel attributeMetaModel = attributeMappingSource.GetModel(dataContextType);
-            MetaModel customMetaModel = new RepositoryMetaModel(Repository, this, attributeMetaModel);
+            MetaModel customMetaModel = new RepositoryMetaModel(Workspace, this, attributeMetaModel);
             return customMetaModel;
         }
     }

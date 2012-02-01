@@ -13,21 +13,21 @@ namespace Contendio.Sql.Provider
 {
     class RepositorySqlProvider : IQueryProvider
     {
-        public string Repository { get; private set; }
+        public string Workspace { get; private set; }
 
         private readonly Func<IQueryable, DbCommand> translator;
         private readonly Func<Type, string, object[], IEnumerable> executor;
 
-        public RepositorySqlProvider(string repository, Func<IQueryable, DbCommand> translator, Func<Type, string, object[], IEnumerable> executor)
+        public RepositorySqlProvider(string workspace, Func<IQueryable, DbCommand> translator, Func<Type, string, object[], IEnumerable> executor)
         {
-            this.Repository = repository;
+            this.Workspace = workspace;
             this.translator = translator;
             this.executor = executor;
         }
 
         public IQueryable<TElement> CreateQuery<TElement>(Expression expression)
         {
-            return new RepositoryQueryable<TElement>(Repository, this, expression);
+            return new RepositoryQueryable<TElement>(Workspace, this, expression);
         }
 
         public IQueryable CreateQuery(Expression expression)
@@ -40,7 +40,7 @@ namespace Contendio.Sql.Provider
             bool isCollection = typeof(TResult).IsGenericType && typeof(TResult).GetGenericTypeDefinition() == typeof(IEnumerable<>);
             Type itemType = isCollection ? typeof(TResult).GetGenericArguments().Single() : typeof(TResult);
             IQueryable queryable = Activator.CreateInstance(
-                typeof(RepositoryQueryable<>).MakeGenericType(itemType), Repository, this, expression) as IQueryable;
+                typeof(RepositoryQueryable<>).MakeGenericType(itemType), Workspace, this, expression) as IQueryable;
 
             IEnumerable queryResult;
 
@@ -48,7 +48,7 @@ namespace Contendio.Sql.Provider
             using (DbCommand command = this.translator(queryable))
             {
                 string commandText = command.CommandText;
-                commandText = commandText.Replace("replaceme_", Repository + "_");
+                commandText = commandText.Replace("replaceme_", Workspace + "_");
                 
                 // Executes the transalted SQL.
                 queryResult = this.executor(

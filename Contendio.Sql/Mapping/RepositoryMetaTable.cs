@@ -9,49 +9,51 @@ namespace Contendio.Sql.Mapping
 {
     class RepositoryMetaTable : MetaTable
     {
-        private MetaTable originalTable;
-        private MetaModel model;
-        private string repository;
+        public string Workspace { get; private set; }
+        public MetaTable Original { get; private set; }
+        public MetaModel RepositoryMetaModel { get; private set; }
+        public MetaType RepositoryMetaType { get; private set; }
 
-        public RepositoryMetaTable(string repository, MetaTable orig, MetaModel model)
+        public RepositoryMetaTable(string workspace, MetaTable orig, MetaModel model)
         {
-            this.repository = repository;
-            this.originalTable = orig;
-            this.model = model;
+            this.Workspace = workspace;
+            this.Original = orig;
+            this.RepositoryMetaModel = model;
+            this.RepositoryMetaType = new RepositoryMetaType(workspace, orig.RowType, this, model);
         }
 
         public override MethodInfo DeleteMethod
         {
-            get { return this.originalTable.DeleteMethod; }
+            get { return this.Original.DeleteMethod; }
         }
 
         public override MethodInfo InsertMethod
         {
-            get { return this.originalTable.InsertMethod; }
+            get { return this.Original.InsertMethod; }
         }
 
         public override MetaModel Model
         {
-            get { return this.model; }
+            get { return this.RepositoryMetaModel; }
         }
 
         public override MetaType RowType
         {
-            get { return this.originalTable.RowType; }
+            get { return this.RepositoryMetaType; }
         }
 
         public override string TableName
         {
             get 
             {
-                string tableName = this.originalTable.TableName;
-                return tableName.Replace("replaceme_", repository + "_");
+                string tableName = this.Original.TableName;
+                return tableName.Replace("replaceme_", Workspace + "_");
             }
         }
 
         public override MethodInfo UpdateMethod
         {
-            get { return originalTable.UpdateMethod; }
+            get { return Original.UpdateMethod; }
         }
     }
 }

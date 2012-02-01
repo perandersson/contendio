@@ -15,7 +15,7 @@ namespace Contendio
         /// <summary>
         /// Retrieves the repository name
         /// </summary>
-        string Repository { get; }
+        string Workspace { get; }
 
         /// <summary>
         /// Retrieves the root node from the database (i.e. that node which doesnt have a parent node)
