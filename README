@@ -1,41 +1,81 @@
-What is a content repository and why use them?
-===========================
-The short version: A content repository is a way to simulate a document database in a rational database.
-The long version: Content repositories are often used in CRM and CMS systems. This is because a document database structure fits those
-types of systems better then simple rational databases.... <add more stuff here>
+**What is a content repository?**
 
+A content repository is an abstraction layer between your application source code and the database. It's purpose is to "simulate" that your
+database is a document database.
 
-Requirements
-======================
-1. Microsoft .NET Framework 4
-http://www.microsoft.com/downloads/sv-se/details.aspx?FamilyID=9cfb2d51-5ff4-4491-b0e5-b386f32c0992
+A Content repository saves data in a structured manner and is often used as an application layer for 
+both CMS- (Content management systems) and CRM systems.
 
-2. Visual Studio 2010
+**Why use a content repository?**
 
-3. Microsoft SQL Server 2008 
+**What is contendio?**
 
-4. Recommended: Management Studio
+Contendio is a content repository implementation for .NET framework. I've worked with Apache Jackrabbit before and felt that this type of
+feature is missing in the .NET community.
 
- <add more stuff here>
+The base class for all contendios functionality is the IContentRepository (or SqlContentRepository). When you create a content repository instance
+you specify a workspace name. If the neccessary database tables are missing then Contendio creates them automatically for you. Note that the root
+node is always added for you when the database is created.
 
-Howto
-======================
-This description only works if you have Ultimate Edition of Visual Studio at the moment. 
-A description for Visual Studio 2010 C# Express will be added shortly.
+The content repository also support a complete customizable node type system. You can see them as tags or keywords for nodes and node values.
 
-1. Create a database in your Microsoft SQL Server. It doesn't matter what you call it.
-1.1. Above is not completely true. I'm planning on adding SQLite when performing the unit-tests, but they require
-that a database called "contenido" exists. (Se the constant ConnectionString in the testcases: ContentRepositoryTest and EventTest).
-Change that constant into your a version that matches your own database.
+```c#
 
-2. Open Contenido.sln
+var contentRepository = new SqlContentRepository("myworkspace", connectionString);
 
-3. Run tests
+```
 
-Contenido automatically creates the neccessary tables for it to work based on the DatabaseSchema, ConnectionString and the repository name.
-The test cases use the Repository name "test" which means that when using that repository instance all LINQ queries used will go to those databases.
-Example: When SqlContentRepository initializes, it creates tables called <repository>_Node, <repository>_NodeType etc but still returns the same types of Node and NodeType sql entities.
-It's much easier to see what happens in the code by reading it. Try adding a breakpoint somewhere in the test-cases and see what the database looks like by using
-Microsoft SQL Management Studio
+The above example creates the tables:
+* myworkspace_Node
+* myworkspace_NodeType
+* myworkspace_NodeValue
+* myworkspace_StringValue
+* myworkspace_BinaryValue
+* myworkspace_DateValue
 
-<add more stuff here>
+When creating a content management system then the workspaces usually needed are:
+* website
+* config
+* media
+
+Each workspace is an isolated island. That means that you can't create hard-links between Nodes in different workspaces. You can however create
+"soft" links. Example:
+/ (type = "node:root")
+/index (type = "customtypes:webpage")
+/index/linkComponent (type = "customtypes:component")
+       |- imageAlt = "alt text used on the web page"
+	      workspace = "media"
+		  id = 10
+
+And in the code you do something like this:
+
+```c#
+
+webSiteRoot = contentRepositoryManager.GetContentRepository("website");
+var indexPage = webSiteRoot.GetNode("index");
+var component1 = indexPage.GetNode("linkComponent");
+
+mediaContentRepo = contentRepositoryManager.GetContentRepository(component1.GetValue("workspace"));
+var mediaItem = mediaContentRepo.GetNodeById(component1.GetValue("id"));
+
+```
+
+Contendio also supports LINQ. Example:
+
+```c#
+
+from node in RootNode where node.NodeType.Equals("customtypes:webpage") select node;
+from node in RootNode where node.NodeType.Equals("customtypes:webpage") select new {
+	Name = node.Name,
+	Path = node.Path
+};
+
+from nodeValue in RootNode.Values where !nodeValue.NodeType.Equals("value:hidden") select nodeValue;
+
+```
+
+All node fetches are lazy. That means that no node data below the current node-level are retrieved from the database.
+
+**Requirements**
+
+**Future**
