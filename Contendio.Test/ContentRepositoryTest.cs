@@ -126,10 +126,10 @@ namespace Contendio.Test
                 transaction.Complete();
             }
 
-            childNode = childNode.GetNode("subChildNode1");
-            Assert.IsNotNull(childNode);
-            Assert.AreEqual("/childNode1/subChildNode1", childNode.Path);
-            Assert.AreEqual("subChildNode1", childNode.Name);
+            var subChildNode1 = childNode.GetNode("subChildNode1");
+            Assert.IsNotNull(subChildNode1);
+            Assert.AreEqual("/childNode1/subChildNode1", subChildNode1.Path);
+            Assert.AreEqual("subChildNode1", subChildNode1.Name);
             Assert.AreEqual(1, childNode.Children.Count);
 
             using (var transaction = new TransactionScope())
