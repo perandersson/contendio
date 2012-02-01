@@ -153,6 +153,12 @@ namespace Contendio.Sql.Model
 
         public INode AddNode(string name, string type)
         {
+            //var items = name.Split('/');
+            //int countFromThisNode = items[0].Length == 0 ? 1 : 2;
+            //if (items.Length > countFromThisNode)
+            //    return AddNodeInTree(items, name, type);
+
+
             var sqlNode = new NodeEntity();
             sqlNode.Name = name;
             sqlNode.NodeId = Entity.Id;
@@ -170,6 +176,18 @@ namespace Contendio.Sql.Model
 
             return new SqlNode(sqlNode, ContentRepository);
         }
+
+        //private INode AddNodeInTree(string[] pathNames, string name, string type)
+        //{
+        //    if(pathNames[0].Length == 0)
+        //    {
+        //        // First character was root node
+        //    }
+        //    else
+        //    {
+                
+        //    }
+        //}
 
         public INode GetNode(string path)
         {
