@@ -293,11 +293,27 @@ namespace Contendio.Sql.Model
             if (valueEntity != null)
             {
                 if (valueEntity.StringValueId.HasValue)
-                    QueryManager.DeleteStringValueById(valueEntity.StringValueId.Value);
-                else if(valueEntity.BinaryValueId.HasValue)
-                    QueryManager.DeleteBinaryValueById(valueEntity.BinaryValueId.Value);
-                else if(valueEntity.DateValueId.HasValue)
-                    QueryManager.DeleteDateValueById(valueEntity.DateValueId.Value);
+                {
+                    var tmp = valueEntity.StringValueId.Value;
+                    valueEntity.StringValueId = null;
+                    QueryManager.Save(valueEntity);
+                    QueryManager.DeleteStringValueById(tmp);
+                }
+                else if (valueEntity.BinaryValueId.HasValue)
+                {
+                    var tmp = valueEntity.BinaryValueId.Value;
+                    valueEntity.BinaryValueId = null;
+                    QueryManager.Save(valueEntity);
+                    QueryManager.DeleteBinaryValueById(tmp);
+                }
+                else if (valueEntity.DateValueId.HasValue)
+                {
+                    var tmp = valueEntity.DateValueId.Value;
+                    valueEntity.DateValueId = null;
+                    QueryManager.Save(valueEntity);
+                    QueryManager.DeleteDateValueById(tmp);
+                }
+
             }
 
             return valueEntity;
