@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Contendio.Sql;
 using System.Data.Linq;
 using System.Transactions;
+using Contendio.Exception;
 
 namespace Contendio.Test
 {
@@ -59,6 +60,44 @@ namespace Contendio.Test
             Assert.AreEqual(1, rootNode.Children.Count);
             childNode1.Delete();
             Assert.AreEqual(0, rootNode.Children.Count);
+        }
+
+        [TestMethod]
+        public void TestDeleteChildNodeFromParent()
+        {
+            IContentRepository contentRepository = ContentRepository;
+
+            var rootNode = contentRepository.RootNode;
+            Assert.IsNotNull(rootNode);
+            var testNode1 = rootNode.AddNode("testNode1");
+            Assert.AreEqual(1, rootNode.Children.Count);
+            rootNode.Delete(testNode1);
+            Assert.AreEqual(0, rootNode.Children.Count);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ContendioException))]
+        public void TestAddAbsoluteNodePath()
+        {
+            IContentRepository contentRepository = ContentRepository;
+
+            var rootNode = contentRepository.RootNode;
+            Assert.IsNotNull(rootNode);
+            var testNode1 = rootNode.AddNode("testNode1");
+            Assert.AreEqual(1, rootNode.Children.Count);
+            rootNode.Delete("testNode1");
+            Assert.AreEqual(0, rootNode.Children.Count);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ContendioException))]
+        public void TestGetAbsoluteNodePath()
+        {
+        }
+
+        [TestMethod]
+        public void TestGetRelativeDeepNodePath()
+        {
         }
     }
 }

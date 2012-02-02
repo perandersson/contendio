@@ -154,8 +154,7 @@ namespace Contendio.Sql.Model
 
         public INode AddNode(string name, string type)
         {
-            if (name.StartsWith("/"))
-                throw new ContendioException("Only relative nodes are allowed when adding nodes");
+            ValidateRelativeValue(name, "name");
 
             var names = name.Split('/');
             if (names.Length > 1)
@@ -188,6 +187,7 @@ namespace Contendio.Sql.Model
 
         public INode GetNode(string path)
         {
+            ValidateRelativeValue(path, "path");
             string name = path.Replace("/", "");
 
             var id = Entity.Id;
@@ -207,6 +207,34 @@ namespace Contendio.Sql.Model
 
         public void Delete(string path)
         {
+            ValidateRelativeValue(path, "path");
+            throw new NotImplementedException();
+        }
+
+        private void ValidateRelativeValue(string path, string variableName)
+        {
+            ValidateNonEmpty(path, variableName);
+            if(path[0] == '/')
+                throw new ArgumentException("The '" + variableName + "' argument is invalid. Only relative values are allowed.");
+        }
+
+        private void ValidateNonEmpty(string value, string valueName)
+        {
+            if(value.Length == 0)
+                throw new ArgumentException("The '" + valueName + "' argument cannot be empty");
+        }
+        
+        private void ValidateNonEmpty(byte[] value, string valueName)
+        {
+            if (value == null)
+                throw new ArgumentNullException(valueName);
+
+            if (value.Length == 0)
+                throw new ArgumentException("The '" + valueName + "' argument cannot be empty");
+        }
+
+        public void Delete(INode child)
+        {
             throw new NotImplementedException();
         }
 
@@ -217,6 +245,9 @@ namespace Contendio.Sql.Model
 
         public INodeValue AddValue(string name, string value, string type)
         {
+            ValidateNonEmpty(name, "name");
+            ValidateNonEmpty(value, "value");
+
             using (var transaction = new TransactionScope())
             {
                 var valueEntity = CheckAndDeleteValue(name);
@@ -243,6 +274,9 @@ namespace Contendio.Sql.Model
 
         public INodeValue AddValue(string name, DateTime date, string type)
         {
+            ValidateNonEmpty(name, "name");
+            ValidateNonEmpty(type, "type");
+
             using (var transaction = new TransactionScope())
             {
                 var valueEntity = CheckAndDeleteValue(name);
@@ -269,6 +303,10 @@ namespace Contendio.Sql.Model
 
         public INodeValue AddValue(string name, byte[] array, string type)
         {
+            ValidateNonEmpty(name, "name");
+            ValidateNonEmpty(array, "array");
+            ValidateNonEmpty(type, "type");
+
             using (var transaction = new TransactionScope())
             {
                 var valueEntity = CheckAndDeleteValue(name);
