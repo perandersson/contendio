@@ -188,10 +188,9 @@ namespace Contendio.Sql.Model
         public INode GetNode(string path)
         {
             ValidateRelativeValue(path, "path");
-            string name = path.Replace("/", "");
 
             var id = Entity.Id;
-            var result = (from node in QueryManager.NodeQueryable where node.NodeId.HasValue && node.NodeId.Value.Equals(id) && node.Name.Equals(name) select node);
+            var result = (from node in QueryManager.NodeQueryable where node.NodeId.HasValue && node.NodeId.Value.Equals(id) && node.Name.Equals(path) select node);
             var resultEntity = result.FirstOrDefault();
             if (resultEntity == null)
                 return null;
@@ -231,11 +230,6 @@ namespace Contendio.Sql.Model
 
             if (value.Length == 0)
                 throw new ArgumentException("The '" + valueName + "' argument cannot be empty");
-        }
-
-        public void Delete(INode child)
-        {
-            throw new NotImplementedException();
         }
 
         public INodeValue AddValue(string name, string value)

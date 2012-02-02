@@ -63,19 +63,6 @@ namespace Contendio.Test
         }
 
         [TestMethod]
-        public void TestDeleteChildNodeFromParent()
-        {
-            IContentRepository contentRepository = ContentRepository;
-
-            var rootNode = contentRepository.RootNode;
-            Assert.IsNotNull(rootNode);
-            var testNode1 = rootNode.AddNode("testNode1");
-            Assert.AreEqual(1, rootNode.Children.Count);
-            rootNode.Delete(testNode1);
-            Assert.AreEqual(0, rootNode.Children.Count);
-        }
-
-        [TestMethod]
         [ExpectedException(typeof(ContendioException))]
         public void TestAddAbsoluteNodePath()
         {

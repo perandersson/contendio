@@ -82,13 +82,6 @@ namespace Contendio.Model
         void Delete(string path);
 
         /// <summary>
-        /// Deletes a child node from this node. If the child-node isn't a child 
-        /// of this node then an exception is thrown.
-        /// </summary>
-        /// <param name="child">The child we want to remove</param>
-        void Delete(INode child);
-
-        /// <summary>
         /// Adds a string value to this node
         /// </summary>
         /// <param name="name"></param>
