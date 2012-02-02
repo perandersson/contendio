@@ -73,7 +73,10 @@ namespace Contendio.Test
             var nodeLevel3 = rootNode.AddNode("childNode/subChildNode/nodeLevel3");
             Assert.IsNotNull(nodeLevel3);
             rootNode.Delete("childNode/subChildNode/nodeLevel3");
-            Assert.AreEqual(0, rootNode.GetNode("childNode/subChildNode").Children.Count);
+
+            var subChildNode = rootNode.GetNode("childNode/subChildNode");
+            Assert.IsNotNull(subChildNode);
+            Assert.AreEqual(0, subChildNode.Children.Count);
         }
 
         [TestMethod]
@@ -87,27 +90,33 @@ namespace Contendio.Test
             var nodeLevel3 = rootNode.AddNode("childNode/subChildNode/nodeLevel3");
             Assert.IsNotNull(nodeLevel3);
             rootNode.Delete("childNode/subChildNode");
-            Assert.AreEqual(0, rootNode.Children.Count);
+            Assert.AreEqual(1, rootNode.Children.Count);
+            var childNode = rootNode.GetNode("childNode");
+            Assert.IsNotNull(childNode);
+            Assert.AreEqual(0, childNode.Children.Count);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ContendioException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void TestAddAbsoluteNodePath()
         {
             IContentRepository contentRepository = ContentRepository;
 
             var rootNode = contentRepository.RootNode;
             Assert.IsNotNull(rootNode);
-            var testNode1 = rootNode.AddNode("testNode1");
-            Assert.AreEqual(1, rootNode.Children.Count);
-            rootNode.Delete("testNode1");
-            Assert.AreEqual(0, rootNode.Children.Count);
+            rootNode.AddNode("/childNode/subChildNode/nodeLevel3");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ContendioException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void TestGetAbsoluteNodePath()
         {
+            IContentRepository contentRepository = ContentRepository;
+
+            var rootNode = contentRepository.RootNode;
+            Assert.IsNotNull(rootNode);
+            rootNode.AddNode("childNode/subChildNode/nodeLevel3");
+            rootNode.GetNode("/childNode/subChildNode/nodeLevel3");
         }
 
         [TestMethod]

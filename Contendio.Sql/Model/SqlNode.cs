@@ -189,6 +189,18 @@ namespace Contendio.Sql.Model
         {
             ValidateRelativeValue(path, "path");
 
+            var paths = path.Split('/');
+            if (paths.Length > 1)
+            {
+                var node = GetNode(paths[0]);
+                for(int i = 1; i < paths.Length; ++i)
+                {
+                    node = node.GetNode(paths[i]);
+                }
+
+                return node;
+            }
+
             var id = Entity.Id;
             var result = (from node in QueryManager.NodeQueryable where node.NodeId.HasValue && node.NodeId.Value.Equals(id) && node.Name.Equals(path) select node);
             var resultEntity = result.FirstOrDefault();
@@ -201,7 +213,20 @@ namespace Contendio.Sql.Model
 
         public void Delete()
         {
-            QueryManager.Delete(Entity);
+            using (var transaction = new TransactionScope())
+            {
+                DeleteAllRelativeNodesAndValues();
+                QueryManager.Delete(Entity);
+                transaction.Complete();
+            }
+        }
+
+        private void DeleteAllRelativeNodesAndValues()
+        {
+            foreach(var child in Children)
+            {
+                child.Delete();
+            }
         }
 
         public void Delete(string path)
