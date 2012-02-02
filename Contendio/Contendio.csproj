@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exception\InvalidNodeValueTypeException.cs" />
     <Compile Include="Model\INode.cs" />
     <Compile Include="Model\INodeType.cs" />
     <Compile Include="Model\INodeValue.cs" />

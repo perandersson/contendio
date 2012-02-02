@@ -100,5 +100,23 @@ namespace Contendio.Test
             Assert.AreEqual(date, values[2].GetDateTime());
             Assert.AreEqual(date.ToString(CultureInfo.InvariantCulture), values[2].GetString());
         }
+
+        [TestMethod]
+        public void TestConvertStringToDate()
+        {
+            IContentRepository contentRepository = ContentRepository;
+
+            var rootNode = contentRepository.RootNode;
+            Assert.IsNotNull(rootNode);
+
+            var date = DateTime.Now;
+            rootNode.AddValue("datevalue", date.ToString(CultureInfo.InvariantCulture));
+
+            var values = rootNode.Values[0];
+            Assert.IsNotNull(values);
+            var dateTime = values.GetDateTime();
+            Assert.IsNotNull(dateTime);
+            Assert.AreEqual(date.ToString(CultureInfo.InvariantCulture), dateTime.Value.ToString(CultureInfo.InvariantCulture));
+        }
     }
 }

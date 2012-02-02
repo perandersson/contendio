@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using Contendio.Exception;
 using Contendio.Sql.Entity;
 using System.IO;
 using Contendio.Model;
@@ -70,53 +71,78 @@ namespace Contendio.Sql.Model
 
         public string GetString()
         {
-            if (!Entity.StringValueId.HasValue)
+            if(Entity.StringValueId.HasValue)
             {
-                // If binary, throw new exception
-                if (Entity.DateValueId.HasValue)
-                {
-                    var dateTime = GetDateTime();
-                    if (dateTime != null) 
-                        return dateTime.Value.ToString(CultureInfo.InvariantCulture);
-                }
+                var result = QueryManager.GetStringValueById(Entity.StringValueId.Value);
+                if (result == null)
+                    return string.Empty;
 
-                return string.Empty;
+                return result.Value;
             }
 
-            var result = QueryManager.GetStringValueById(Entity.StringValueId.Value);
-            if (result == null)
-                return string.Empty;
+            if (Entity.DateValueId.HasValue)
+            {
+                var dateTime = GetDateTime();
+                if (dateTime != null)
+                    return dateTime.Value.ToString(CultureInfo.InvariantCulture);
+            }
 
-            return result.Value;
+            if(Entity.BinaryValueId.HasValue)
+                throw new InvalidNodeValueTypeException("Cannot convert a binary value into a string");
+
+            return String.Empty;
         }
 
         public System.IO.Stream GetStream()
         {
-            if (!Entity.BinaryValueId.HasValue)
-                return null;
+            if (Entity.BinaryValueId.HasValue)
+            {
+                var result = QueryManager.GetBinaryValueById(Entity.BinaryValueId.Value);
+                if (result == null)
+                    return null;
 
-            var result = QueryManager.GetBinaryValueById(Entity.BinaryValueId.Value);
-            if (result == null)
-                return null;
+                return new MemoryStream(result.Value.ToArray());
+            }
 
-            return new MemoryStream(result.Value.ToArray());
+            if(Entity.StringValueId.HasValue)
+            {
+                var str = GetString();
+                var bytes = System.Text.Encoding.Default.GetBytes(str);
+                return new MemoryStream(bytes);
+            }
+
+            if(Entity.DateValueId.HasValue)
+                throw new InvalidNodeValueTypeException("Cannot convet a DateType value into a Stream");
+
+            return null;
         }
 
 
         public DateTime? GetDateTime()
         {
-            if (!Entity.DateValueId.HasValue)
+            if (Entity.DateValueId.HasValue)
             {
-                // Try to convert value from string
-                // If not, throw exception.
-                return null;
+                var result = QueryManager.GetDateValueById(Entity.DateValueId.Value);
+                if (result == null)
+                    return null;
+
+                return result.Value;
             }
 
-            var result = QueryManager.GetDateValueById(Entity.DateValueId.Value);
-            if (result == null)
-                return null;
+            if(Entity.StringValueId.HasValue)
+            {
+                var str = GetString();
+                DateTime value = DateTime.Now;
+                if(!DateTime.TryParse(str, out value))
+                    throw new InvalidNodeValueTypeException("Cannot convert the string: '" + str + "' into a DateTime object");
 
-            return result.Value;
+                return value;
+            }
+
+            if (Entity.BinaryValueId.HasValue)
+                throw new InvalidNodeValueTypeException("Cannot convet a Binary value into a DateTime object");
+
+            return null;
         }
     }
 }
