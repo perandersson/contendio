@@ -67,10 +67,18 @@ namespace Contendio.Sql.Model
             }
         }
 
-        public string ValueAsString()
+        public string GetString()
         {
             if (!Entity.StringValueId.HasValue)
+            {
+                // If binary, throw new exception
+                if (Entity.DateValueId.HasValue)
+                {
+                    return Entity.DateValueId.Value.ToString();
+                }
+
                 return string.Empty;
+            }
 
             var result = QueryManager.GetStringValueById(Entity.StringValueId.Value);
             if (result == null)
@@ -79,7 +87,7 @@ namespace Contendio.Sql.Model
             return result.Value;
         }
 
-        public System.IO.Stream ValueAsStream()
+        public System.IO.Stream GetStream()
         {
             if (!Entity.BinaryValueId.HasValue)
                 return null;
@@ -92,10 +100,14 @@ namespace Contendio.Sql.Model
         }
 
 
-        public DateTime? ValueAsDate()
+        public DateTime? GetDateTime()
         {
             if (!Entity.DateValueId.HasValue)
+            {
+                // Try to convert value from string
+                // If not, throw exception.
                 return null;
+            }
 
             var result = QueryManager.GetDateValueById(Entity.DateValueId.Value);
             if (result == null)

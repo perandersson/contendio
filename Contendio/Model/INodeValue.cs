@@ -32,7 +32,7 @@ namespace Contendio.Model
         /// Retrieves the value as a normal string.
         /// </summary>
         /// <returns>The string value</returns>
-        string ValueAsString();
+        string GetString();
 
         /// <summary>
         /// Retrieves the value as a stream. This method should be used when the value is a binary type of value
@@ -44,12 +44,12 @@ namespace Contendio.Model
         /// }
         /// </example>
         /// <returns>A stream. The caller is responsible for closing the stream when the reading is done</returns>
-        Stream ValueAsStream();
+        Stream GetStream();
 
         /// <summary>
         /// Retrieves the date if it's a value id.
         /// </summary>
         /// <returns></returns>
-        DateTime? ValueAsDate();
+        DateTime? GetDateTime();
     }
 }

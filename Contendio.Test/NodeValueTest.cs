@@ -57,8 +57,8 @@ namespace Contendio.Test
             var values = rootNode.Values;
 
             Assert.AreEqual(2, values.Count);
-            Assert.AreEqual("hello world!!!", values[0].ValueAsString());
-            Assert.AreEqual("goodbye world!!!", values[1].ValueAsString());
+            Assert.AreEqual("hello world!!!", values[0].GetString());
+            Assert.AreEqual("goodbye world!!!", values[1].GetString());
         }
 
         [TestMethod]
@@ -75,8 +75,29 @@ namespace Contendio.Test
             var values = rootNode.Values;
 
             Assert.AreEqual(2, values.Count);
-            Assert.AreEqual("replacedValue!!!", values[0].ValueAsString());
-            Assert.AreEqual("goodbye world!!!", values[1].ValueAsString());
+            Assert.AreEqual("replacedValue!!!", values[0].GetString());
+            Assert.AreEqual("goodbye world!!!", values[1].GetString());
+        }
+
+        [TestMethod]
+        public void TestDateValue()
+        {
+            IContentRepository contentRepository = ContentRepository;
+
+            var rootNode = contentRepository.RootNode;
+            Assert.IsNotNull(rootNode);
+            rootNode.AddValue("mystringvalue", "hello world!!!");
+            rootNode.AddValue("mystringvalue2", "goodbye world!!!");
+
+            var date = DateTime.Now;
+            rootNode.AddValue("changeddate", date);
+
+            var values = rootNode.Values;
+            Assert.AreEqual(3, values.Count);
+            Assert.AreEqual("hello world!!!", values[0].GetString());
+            Assert.AreEqual("goodbye world!!!", values[1].GetString());
+            Assert.AreEqual(date, values[2].GetDateTime());
+            Assert.AreEqual(date.ToString(), values[2].GetString());
         }
     }
 }
