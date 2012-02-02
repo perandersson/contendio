@@ -20,9 +20,6 @@ namespace Contendio.Sql
 
         private Table<NodeEntity> nodeTable;
         private Table<NodeValueEntity> nodeValueTable;
-        private Table<BinaryValueEntity> binaryValueTable;
-        private Table<StringValueEntity> stringValueTable;
-        private Table<DateValueEntity> dateValueTable;
         private Table<NodeTypeEntity> nodeTypeTable;
 
         #endregion
@@ -33,9 +30,6 @@ namespace Contendio.Sql
             this.DataContext = dataContext;
             this.nodeTypeTable = DataContext.GetTable<NodeTypeEntity>();
             this.nodeTable = DataContext.GetTable<NodeEntity>();
-            this.stringValueTable = DataContext.GetTable<StringValueEntity>();
-            this.binaryValueTable = DataContext.GetTable<BinaryValueEntity>();
-            this.dateValueTable = DataContext.GetTable<DateValueEntity>();
             this.nodeValueTable = DataContext.GetTable<NodeValueEntity>();
         }
 
@@ -47,21 +41,6 @@ namespace Contendio.Sql
         public IQueryable<NodeValueEntity> NodeValueQueryable
         {
             get { return GetQueryable(nodeValueTable); }
-        }
-
-        public IQueryable<BinaryValueEntity> BinaryValueQueryable
-        {
-            get { return GetQueryable(binaryValueTable); }
-        }
-
-        public IQueryable<StringValueEntity> StringValueQueryable
-        {
-            get { return GetQueryable(stringValueTable); }
-        }
-
-        public IQueryable<DateValueEntity> DateValueQueryable
-        {
-            get { return GetQueryable(dateValueTable); }
         }
 
         public IQueryable<NodeTypeEntity> NodeTypeQueryable
@@ -101,21 +80,6 @@ namespace Contendio.Sql
             Save(nodeValueTable, nodeValue);
         }
 
-        public void Save(BinaryValueEntity binaryValue)
-        {
-            Save(binaryValueTable, binaryValue);
-        }
-
-        public void Save(StringValueEntity stringValue)
-        {
-            Save(stringValueTable, stringValue);
-        }
-
-        public void Save(DateValueEntity dateValue)
-        {
-            Save(dateValueTable, dateValue);
-        }
-
         public void Save(NodeTypeEntity nodeType)
         {
             Save(nodeTypeTable, nodeType);
@@ -153,7 +117,12 @@ namespace Contendio.Sql
 
         public void Delete(NodeEntity node)
         {
+            DeleteNodeValuesByNode(node.Id);
             Delete(nodeTable, node);
+        }
+
+        private void DeleteNodeValuesByNode(Int64 id)
+        {
         }
 
         public void Delete(NodeValueEntity nodeValue)
@@ -161,48 +130,15 @@ namespace Contendio.Sql
             Delete(nodeValueTable, nodeValue);
         }
 
-        public void Delete(BinaryValueEntity binaryValue)
-        {
-            Delete(binaryValueTable, binaryValue);
-        }
-
-        public void Delete(StringValueEntity stringValue)
-        {
-            Delete(stringValueTable, stringValue);
-        }
-
         public void Delete(NodeTypeEntity nodeType)
         {
             Delete(nodeTypeTable, nodeType);
         }
-
-        public void Delete(DateValueEntity dateValue)
-        {
-            Delete(dateValueTable, dateValue);
-        }
-
+        
         private void Delete(ITable table, object entity)
         {
             table.DeleteOnSubmit(entity);
             DataContext.SubmitChanges();
-        }
-
-        public void DeleteBinaryValueById(Int64 id)
-        {
-            var value = GetBinaryValueById(id);
-            Delete(value);
-        }
-
-        public void DeleteDateValueById(Int64 id)
-        {
-            var value = GetDateValueById(id);
-            Delete(value);
-        }
-
-        public void DeleteStringValueById(Int64 id)
-        {
-            var value = GetStringValueById(id);
-            Delete(value);
         }
 
         public NodeTypeEntity GetNodeType(string name)
@@ -229,27 +165,6 @@ namespace Contendio.Sql
             var childrenQuery = from node in NodeQueryable where node.NodeId.HasValue && node.NodeId.Value.Equals(nodeId) select node;
             var children = childrenQuery.ToList();
             return children;
-        }
-
-        public BinaryValueEntity GetBinaryValueById(Int64 id)
-        {
-            var valueQuery = from value in BinaryValueQueryable where value.Id.Equals(id) select value;
-            var result = valueQuery.FirstOrDefault();
-            return result;
-        }
-
-        public StringValueEntity GetStringValueById(Int64 id)
-        {
-            var valueQuery = from value in StringValueQueryable where value.Id.Equals(id) select value;
-            var result = valueQuery.FirstOrDefault();
-            return result;
-        }
-
-        public DateValueEntity GetDateValueById(Int64 id)
-        {
-            var valueQuery = from value in DateValueQueryable where value.Id.Equals(id) select value;
-            var result = valueQuery.FirstOrDefault();
-            return result;
         }
     }
 }

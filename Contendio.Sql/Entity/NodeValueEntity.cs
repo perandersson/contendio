@@ -32,24 +32,6 @@ namespace Contendio.Sql.Entity
         /// 
         /// </summary>
         [Column]
-        public Int64? StringValueId { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [Column]
-        public Int64? BinaryValueId { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [Column]
-        public Int64? DateValueId { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [Column]
         public Int64 NodeId { get; set; }
 
         /// <summary>
@@ -63,5 +45,23 @@ namespace Contendio.Sql.Entity
         /// </summary>
         [Column(UpdateCheck = UpdateCheck.Never)]
         public DateTime ChangedDate { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Column]
+        public string StringValue { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Column(UpdateCheck = UpdateCheck.Never)]
+        public Binary BinaryValue { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Column]
+        public DateTime? DateTimeValue { get; set; }
     }
 }

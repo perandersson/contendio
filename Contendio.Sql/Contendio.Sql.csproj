@@ -42,15 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entity\DateValueEntity.cs" />
     <Compile Include="Mapping\RepositoryMetaType.cs" />
     <Compile Include="SqlUtils.cs" />
-    <Compile Include="Entity\BinaryValueEntity.cs" />
     <Compile Include="Entity\IEntityWithId.cs" />
     <Compile Include="Entity\NodeEntity.cs" />
     <Compile Include="Entity\NodeTypeEntity.cs" />
     <Compile Include="Entity\NodeValueEntity.cs" />
-    <Compile Include="Entity\StringValueEntity.cs" />
     <Compile Include="Model\SqlNodeType.cs" />
     <Compile Include="Model\SqlNodeValue.cs" />
     <Compile Include="Model\SqlNode.cs" />

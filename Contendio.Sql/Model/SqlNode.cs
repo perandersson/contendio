@@ -255,23 +255,15 @@ namespace Contendio.Sql.Model
             ValidateNonEmpty(name, "name");
             ValidateNonEmpty(value, "value");
 
-            using (var transaction = new TransactionScope())
-            {
-                var valueEntity = CheckAndDeleteValue(name);
-                if (valueEntity == null)
-                    valueEntity = CreateNewValueEntity(name, type);
+            var valueEntity = GetNodeValueByName(name) ?? CreateNewValueEntity(name, type);
 
-                var stringEntity = new StringValueEntity();
-                stringEntity.Value = value;
-                QueryManager.Save(stringEntity);
+            valueEntity.StringValue = value;
+            valueEntity.DateTimeValue = null;
+            valueEntity.BinaryValue = null;
+            valueEntity.ChangedDate = DateTime.Now;
 
-                valueEntity.StringValueId = stringEntity.Id;
-                valueEntity.ChangedDate = DateTime.Now;
-
-                QueryManager.Save(valueEntity);
-                transaction.Complete();
-                return new SqlNodeValue(valueEntity, ContentRepository);
-            }
+            QueryManager.Save(valueEntity);
+            return new SqlNodeValue(valueEntity, ContentRepository);
         }
 
         public INodeValue AddValue(string name, DateTime date)
@@ -284,23 +276,15 @@ namespace Contendio.Sql.Model
             ValidateNonEmpty(name, "name");
             ValidateNonEmpty(type, "type");
 
-            using (var transaction = new TransactionScope())
-            {
-                var valueEntity = CheckAndDeleteValue(name);
-                if (valueEntity == null)
-                    valueEntity = CreateNewValueEntity(name, type);
+            var valueEntity = GetNodeValueByName(name) ?? CreateNewValueEntity(name, type);
 
-                var dateEntity = new DateValueEntity();
-                dateEntity.Value = date;
-                QueryManager.Save(dateEntity);
+            valueEntity.StringValue = null;
+            valueEntity.DateTimeValue = date;
+            valueEntity.BinaryValue = null;
+            valueEntity.ChangedDate = DateTime.Now;
 
-                valueEntity.DateValueId = dateEntity.Id;
-                valueEntity.ChangedDate = DateTime.Now;
-
-                QueryManager.Save(valueEntity);
-                transaction.Complete();
-                return new SqlNodeValue(valueEntity, ContentRepository);
-            }
+            QueryManager.Save(valueEntity);
+            return new SqlNodeValue(valueEntity, ContentRepository);
         }
 
         public INodeValue AddValue(string name, byte[] array)
@@ -314,23 +298,15 @@ namespace Contendio.Sql.Model
             ValidateNonEmpty(array, "array");
             ValidateNonEmpty(type, "type");
 
-            using (var transaction = new TransactionScope())
-            {
-                var valueEntity = CheckAndDeleteValue(name);
-                if (valueEntity == null)
-                    valueEntity = CreateNewValueEntity(name, type);
+            var valueEntity = GetNodeValueByName(name) ?? CreateNewValueEntity(name, type);
 
-                var binaryEntity = new BinaryValueEntity();
-                binaryEntity.Value = array;
-                QueryManager.Save(binaryEntity);
+            valueEntity.StringValue = null;
+            valueEntity.DateTimeValue = null;
+            valueEntity.BinaryValue = array;
+            valueEntity.ChangedDate = DateTime.Now;
 
-                valueEntity.BinaryValueId = binaryEntity.Id;
-                valueEntity.ChangedDate = DateTime.Now;
-
-                QueryManager.Save(valueEntity);
-                transaction.Complete();
-                return new SqlNodeValue(valueEntity, ContentRepository);
-            }
+            QueryManager.Save(valueEntity);
+            return new SqlNodeValue(valueEntity, ContentRepository);
         }
 
         private NodeValueEntity CreateNewValueEntity(string name, string type)
@@ -340,44 +316,18 @@ namespace Contendio.Sql.Model
             entity.NodeId = Entity.Id;
             entity.NodeTypeId = QueryManager.GetNodeType(type).Id;
             entity.AddedDate = DateTime.Now;
-            entity.StringValueId = null;
-            entity.BinaryValueId = null;
-            entity.DateValueId = null;
+            entity.StringValue = null;
+            entity.BinaryValue = null;
+            entity.DateTimeValue = null;
             return entity;
         }
-        
-        private NodeValueEntity CheckAndDeleteValue(string name)
+
+        private NodeValueEntity GetNodeValueByName(string name)
         {
             var checkForValue = from nodeValue in QueryManager.NodeValueQueryable where nodeValue.NodeId == Id && nodeValue.Name.Equals(name) select nodeValue;
             var valueEntity = checkForValue.FirstOrDefault();
-            if (valueEntity != null)
-            {
-                if (valueEntity.StringValueId.HasValue)
-                {
-                    var tmp = valueEntity.StringValueId.Value;
-                    valueEntity.StringValueId = null;
-                    QueryManager.Save(valueEntity);
-                    QueryManager.DeleteStringValueById(tmp);
-                }
-                else if (valueEntity.BinaryValueId.HasValue)
-                {
-                    var tmp = valueEntity.BinaryValueId.Value;
-                    valueEntity.BinaryValueId = null;
-                    QueryManager.Save(valueEntity);
-                    QueryManager.DeleteBinaryValueById(tmp);
-                }
-                else if (valueEntity.DateValueId.HasValue)
-                {
-                    var tmp = valueEntity.DateValueId.Value;
-                    valueEntity.DateValueId = null;
-                    QueryManager.Save(valueEntity);
-                    QueryManager.DeleteDateValueById(tmp);
-                }
-
-            }
-
             return valueEntity;
         }
-
+        
     }
 }

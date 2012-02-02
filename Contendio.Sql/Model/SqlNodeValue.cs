@@ -71,23 +71,17 @@ namespace Contendio.Sql.Model
 
         public string GetString()
         {
-            if(Entity.StringValueId.HasValue)
-            {
-                var result = QueryManager.GetStringValueById(Entity.StringValueId.Value);
-                if (result == null)
-                    return string.Empty;
+            if(Entity.StringValue != null)
+                return Entity.StringValue;
 
-                return result.Value;
-            }
-
-            if (Entity.DateValueId.HasValue)
+            if(Entity.DateTimeValue.HasValue)
             {
                 var dateTime = GetDateTime();
                 if (dateTime != null)
                     return dateTime.Value.ToString(CultureInfo.InvariantCulture);
             }
 
-            if(Entity.BinaryValueId.HasValue)
+            if (Entity.BinaryValue != null)
                 throw new InvalidNodeValueTypeException("Cannot convert a binary value into a string");
 
             return String.Empty;
@@ -95,23 +89,19 @@ namespace Contendio.Sql.Model
 
         public System.IO.Stream GetStream()
         {
-            if (Entity.BinaryValueId.HasValue)
+            if (Entity.BinaryValue != null)
             {
-                var result = QueryManager.GetBinaryValueById(Entity.BinaryValueId.Value);
-                if (result == null)
-                    return null;
-
-                return new MemoryStream(result.Value.ToArray());
+                return new MemoryStream(Entity.BinaryValue.ToArray());
             }
 
-            if(Entity.StringValueId.HasValue)
+            if (Entity.StringValue != null)
             {
                 var str = GetString();
                 var bytes = System.Text.Encoding.Default.GetBytes(str);
                 return new MemoryStream(bytes);
             }
 
-            if(Entity.DateValueId.HasValue)
+            if (Entity.DateTimeValue.HasValue)
                 throw new InvalidNodeValueTypeException("Cannot convet a DateType value into a Stream");
 
             return null;
@@ -120,26 +110,22 @@ namespace Contendio.Sql.Model
 
         public DateTime? GetDateTime()
         {
-            if (Entity.DateValueId.HasValue)
+            if (Entity.DateTimeValue.HasValue)
             {
-                var result = QueryManager.GetDateValueById(Entity.DateValueId.Value);
-                if (result == null)
-                    return null;
-
-                return result.Value;
+                return Entity.DateTimeValue.Value;
             }
 
-            if(Entity.StringValueId.HasValue)
+            if (Entity.StringValue != null)
             {
                 var str = GetString();
-                DateTime value = DateTime.Now;
+                DateTime value;
                 if(!DateTime.TryParse(str, out value))
                     throw new InvalidNodeValueTypeException("Cannot convert the string: '" + str + "' into a DateTime object");
 
                 return value;
             }
 
-            if (Entity.BinaryValueId.HasValue)
+            if (Entity.BinaryValue != null)
                 throw new InvalidNodeValueTypeException("Cannot convet a Binary value into a DateTime object");
 
             return null;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.Entity;
+using Contendio.Exception;
 using Contendio.Model;
 using System.Data.SqlClient;
 using System.Resources;
@@ -50,18 +51,18 @@ namespace Contendio.Sql
 
         public void Uninstall()
         {
-            List<string> batches = new List<string>();
-            batches.Add("USE [" + DatabaseSchema + "]");
-            batches.Add("DROP TABLE [dbo].[" + Workspace + "_NodeValue]");
-            batches.Add("DROP TABLE [dbo].[" + Workspace + "_StringValue]");
-            batches.Add("DROP TABLE [dbo].[" + Workspace + "_BinaryValue]");
-            batches.Add("DROP TABLE [dbo].[" + Workspace + "_DateValue]");
-            batches.Add("DROP TABLE [dbo].[" + Workspace + "_Node]");
-            batches.Add("DROP TABLE [dbo].[" + Workspace + "_NodeType]");
+            var batches = new List<string>
+                              {
+                                  "USE [" + DatabaseSchema + "]",
+                                  "DROP TABLE [dbo].[" + Workspace + "_NodeValue]",
+                                  "DROP TABLE [dbo].[" + Workspace + "_Node]",
+                                  "DROP TABLE [dbo].[" + Workspace + "_NodeType]"
+                              };
+
             ExecuteBatches(batches);
         }
 
-        private void ExecuteBatches(List<string> batches)
+        private void ExecuteBatches(IEnumerable<string> batches)
         {
             using (var connection = new SqlConnection(this.connectionString))
             {
@@ -81,13 +82,13 @@ namespace Contendio.Sql
             }
         }
 
-        private List<string> GetBatches()
+        private IEnumerable<string> GetBatches()
         {
-            List<string> batches = new List<string>();
+            var batches = new List<string>();
             batches.Add("USE [" + DatabaseSchema + "]");
 
             var script = GetInstallSqlQuery();
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             char prevChar = '0';
             foreach (var scriptChar in script)
             {
@@ -95,7 +96,6 @@ namespace Contendio.Sql
                 {
                     // Remove the previous character from the string buffer
                     sb.Remove(sb.Length - 1, 1);
-                    //batches.Add(new SqlInstallBatch() { Script = sb.ToString() });
                     var str = sb.ToString();
                     if (str.Length > 0)
                         batches.Add(str);
@@ -115,6 +115,8 @@ namespace Contendio.Sql
         {
             string[] names = Assembly.GetExecutingAssembly().GetManifestResourceNames();
             var resourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Contendio.Sql.Resources.DatabaseScripts.sql");
+            if (resourceStream == null)
+                throw new ContendioException("Error, could not find resource 'DatabaseScripts.sql' which is used when installing a workspace");
 
             using (var textStreamReader = new StreamReader(resourceStream))
             {
