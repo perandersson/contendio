@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
@@ -97,7 +98,7 @@ namespace Contendio.Test
             Assert.AreEqual("hello world!!!", values[0].GetString());
             Assert.AreEqual("goodbye world!!!", values[1].GetString());
             Assert.AreEqual(date, values[2].GetDateTime());
-            Assert.AreEqual(date.ToString(), values[2].GetString());
+            Assert.AreEqual(date.ToString(CultureInfo.InvariantCulture), values[2].GetString());
         }
     }
 }

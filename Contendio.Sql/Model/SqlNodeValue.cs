@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using Contendio.Sql.Entity;
@@ -74,7 +75,9 @@ namespace Contendio.Sql.Model
                 // If binary, throw new exception
                 if (Entity.DateValueId.HasValue)
                 {
-                    return Entity.DateValueId.Value.ToString();
+                    var dateTime = GetDateTime();
+                    if (dateTime != null) 
+                        return dateTime.Value.ToString(CultureInfo.InvariantCulture);
                 }
 
                 return string.Empty;
