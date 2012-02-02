@@ -63,6 +63,34 @@ namespace Contendio.Test
         }
 
         [TestMethod]
+        public void TestRemoveSubChildNode()
+        {
+            IContentRepository contentRepository = ContentRepository;
+
+            var rootNode = contentRepository.RootNode;
+            Assert.IsNotNull(rootNode);
+
+            var nodeLevel3 = rootNode.AddNode("childNode/subChildNode/nodeLevel3");
+            Assert.IsNotNull(nodeLevel3);
+            rootNode.Delete("childNode/subChildNode/nodeLevel3");
+            Assert.AreEqual(0, rootNode.GetNode("childNode/subChildNode").Children.Count);
+        }
+
+        [TestMethod]
+        public void TestRemoveRecursiveSubChildNode()
+        {
+            IContentRepository contentRepository = ContentRepository;
+
+            var rootNode = contentRepository.RootNode;
+            Assert.IsNotNull(rootNode);
+
+            var nodeLevel3 = rootNode.AddNode("childNode/subChildNode/nodeLevel3");
+            Assert.IsNotNull(nodeLevel3);
+            rootNode.Delete("childNode/subChildNode");
+            Assert.AreEqual(0, rootNode.Children.Count);
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(ContendioException))]
         public void TestAddAbsoluteNodePath()
         {

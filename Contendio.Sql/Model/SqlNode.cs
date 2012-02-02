@@ -207,7 +207,20 @@ namespace Contendio.Sql.Model
         public void Delete(string path)
         {
             ValidateRelativeValue(path, "path");
-            throw new NotImplementedException();
+            var paths = path.Split('/');
+            if (paths.Length > 1)
+            {
+                var node = GetNode(paths[0]);
+                for (int i = 1; i < paths.Length; ++i)
+                {
+                    node = node.GetNode(paths[i]);
+                }
+
+                node.Delete();
+                return;
+            }
+
+            GetNode(path).Delete();
         }
 
         private void ValidateRelativeValue(string path, string variableName)
