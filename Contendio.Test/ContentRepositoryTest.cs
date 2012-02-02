@@ -131,12 +131,36 @@ namespace Contendio.Test
             Assert.AreEqual("/childNode1/subChildNode1", subChildNode1.Path);
             Assert.AreEqual("subChildNode1", subChildNode1.Name);
             Assert.AreEqual(1, childNode.Children.Count);
+        }
+
+        [TestMethod]
+        public void TestMultipleAddOneLine()
+        {
+            IContentRepository contentRepository = ContentRepository;
+            var rootNode = contentRepository.RootNode;
+            Assert.IsNotNull(rootNode);
 
             using (var transaction = new TransactionScope())
             {
                 rootNode.AddNode("childNode1/subChildNode1/subsubChildNode1");
                 transaction.Complete();
             }
+
+
+            var childNode1 = rootNode.GetNode("childNode1");
+            Assert.AreEqual("/childNode1", childNode1.Path);
+            Assert.AreEqual("childNode1", childNode1.Name);
+            Assert.AreEqual(1, childNode1.Children.Count);
+            
+            var subChildNode1 = childNode1.GetNode("subChildNode1");
+            Assert.AreEqual("/childNode1/subChildNode1", subChildNode1.Path);
+            Assert.AreEqual("subChildNode1", subChildNode1.Name);
+            Assert.AreEqual(1, subChildNode1.Children.Count);
+
+            var subsubChildNode1 = subChildNode1.GetNode("subsubChildNode1");
+            Assert.AreEqual("/childNode1/subChildNode1/subsubChildNode1", subsubChildNode1.Path);
+            Assert.AreEqual("subsubChildNode1", subsubChildNode1.Name);
+            Assert.AreEqual(0, subsubChildNode1.Children.Count);
         }
 
         [TestMethod]
