@@ -7,5 +7,13 @@ namespace Contendio.Exception
 {
     public class ContendioException : System.Exception
     {
+        public ContendioException()
+        {
+        }
+
+        public ContendioException(string message)
+            : base(message)
+        {
+        }
     }
 }

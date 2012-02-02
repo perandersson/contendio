@@ -6,6 +6,7 @@ using Contendio.Sql.Entity;
 using Contendio.Event;
 using Contendio.Model;
 using System.Transactions;
+using Contendio.Exception;
 
 namespace Contendio.Sql.Model
 {
@@ -153,11 +154,19 @@ namespace Contendio.Sql.Model
 
         public INode AddNode(string name, string type)
         {
-            //var items = name.Split('/');
-            //int countFromThisNode = items[0].Length == 0 ? 1 : 2;
-            //if (items.Length > countFromThisNode)
-            //    return AddNodeInTree(items, name, type);
+            if (name.StartsWith("/"))
+                throw new ContendioException("Only relative nodes are allowed when adding nodes");
 
+            var names = name.Split('/');
+            if (names.Length > 1)
+            {
+                INode lastNode = AddNode(names[0], type);
+                for (int i = 1; i < names.Length; ++i)
+                {
+                    lastNode = lastNode.AddNode(names[i], type);
+                }
+                return lastNode;
+            }
 
             var sqlNode = new NodeEntity();
             sqlNode.Name = name;
@@ -176,18 +185,6 @@ namespace Contendio.Sql.Model
 
             return new SqlNode(sqlNode, ContentRepository);
         }
-
-        //private INode AddNodeInTree(string[] pathNames, string name, string type)
-        //{
-        //    if(pathNames[0].Length == 0)
-        //    {
-        //        // First character was root node
-        //    }
-        //    else
-        //    {
-                
-        //    }
-        //}
 
         public INode GetNode(string path)
         {

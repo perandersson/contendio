@@ -142,7 +142,10 @@ namespace Contendio.Test
 
             using (var transaction = new TransactionScope())
             {
-                rootNode.AddNode("childNode1/subChildNode1/subsubChildNode1");
+                var result = rootNode.AddNode("childNode1/subChildNode1/subsubChildNode1");
+                Assert.IsNotNull(result);
+                Assert.AreEqual("/childNode1/subChildNode1/subsubChildNode1", result.Path);
+                Assert.AreEqual("subsubChildNode1", result.Name);
                 transaction.Complete();
             }
 
