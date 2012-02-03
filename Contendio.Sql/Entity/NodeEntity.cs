@@ -53,5 +53,11 @@ namespace Contendio.Sql.Entity
         /// </summary>
         [Column(UpdateCheck = UpdateCheck.Never)]
         public DateTime ChangedDate { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Column]
+        public int Sequence { get; set; }
     }
 }

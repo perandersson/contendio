@@ -63,5 +63,11 @@ namespace Contendio.Sql.Entity
         /// </summary>
         [Column]
         public DateTime? DateTimeValue { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Column]
+        public int Sequence { get; set; }
     }
 }
