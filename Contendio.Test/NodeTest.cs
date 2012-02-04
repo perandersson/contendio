@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Contendio.Sql;
-using System.Data.Linq;
-using System.Transactions;
-using Contendio.Exception;
 
 namespace Contendio.Test
 {
@@ -122,6 +116,7 @@ namespace Contendio.Test
         [TestMethod]
         public void TestGetRelativeDeepNodePath()
         {
+            throw new NotImplementedException();
         }
     }
 }

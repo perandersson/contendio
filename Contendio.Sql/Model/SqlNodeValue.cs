@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using Contendio.Exception;
+using Contendio.Exceptions;
 using Contendio.Sql.Entity;
 using System.IO;
 using Contendio.Model;

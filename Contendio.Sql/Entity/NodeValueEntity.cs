@@ -68,6 +68,6 @@ namespace Contendio.Sql.Entity
         /// 
         /// </summary>
         [Column]
-        public int Sequence { get; set; }
+        public int Index { get; set; }
     }
 }

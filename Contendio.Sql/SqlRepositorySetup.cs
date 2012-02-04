@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
-using System.Data.Entity;
-using Contendio.Exception;
-using Contendio.Model;
+using Contendio.Exceptions;
 using System.Data.SqlClient;
-using System.Resources;
 using System.Reflection;
 using System.IO;
-using System.Data.Linq;
 
 namespace Contendio.Sql
 {
@@ -116,7 +110,7 @@ namespace Contendio.Sql
             string[] names = Assembly.GetExecutingAssembly().GetManifestResourceNames();
             var resourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Contendio.Sql.Resources.DatabaseScripts.sql");
             if (resourceStream == null)
-                throw new ContendioException("Error, could not find resource 'DatabaseScripts.sql' which is used when installing a workspace");
+                throw new ContendioBaseException("Error, could not find resource 'DatabaseScripts.sql' which is used when installing a workspace");
 
             using (var textStreamReader = new StreamReader(resourceStream))
             {

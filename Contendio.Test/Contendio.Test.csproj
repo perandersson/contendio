@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContentRepositoryTest.cs" />
+    <Compile Include="NodeOrderTest.cs" />
     <Compile Include="NodeTest.cs" />
     <Compile Include="NodeValueTest.cs" />
     <Compile Include="InstallAndUninstallTest.cs" />

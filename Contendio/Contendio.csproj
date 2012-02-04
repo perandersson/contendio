@@ -42,14 +42,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Exception\InvalidNodeValueTypeException.cs" />
+    <Compile Include="Exceptions\CannotMoveNodeException.cs" />
+    <Compile Include="Exceptions\ContendioBaseException.cs" />
+    <Compile Include="Exceptions\InvalidNodeValueTypeException.cs" />
     <Compile Include="Model\INode.cs" />
     <Compile Include="Model\INodeType.cs" />
     <Compile Include="Model\INodeValue.cs" />
     <Compile Include="Event\Args\NodeChangeArgs.cs" />
     <Compile Include="Event\RepositoryChangeEventHandler.cs" />
     <Compile Include="Event\RepositoryEventType.cs" />
-    <Compile Include="Exception\ContendioException.cs" />
     <Compile Include="IObserverManager.cs" />
     <Compile Include="IQueryManager.cs" />
     <Compile Include="IRepositorySetup.cs" />

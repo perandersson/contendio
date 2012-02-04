@@ -35,10 +35,9 @@ CREATE TABLE [dbo].[replaceme_Node](
 	[Name] [varchar](64) NOT NULL,
 	[NodeId] [bigint] NULL,
 	[NodeTypeId] [int] NOT NULL,
-	[Path] [varchar](max) NOT NULL,
 	[AddedDate] [datetime] NOT NULL,
 	[ChangedDate] [datetime] NOT NULL,
-	[Sequence] [int] NOT NULL DEFAULT 0,
+	[Index] [int] NOT NULL DEFAULT 0,
  CONSTRAINT [PK_replaceme_Node] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -48,7 +47,7 @@ GO
 SET ANSI_PADDING OFF
 GO
 SET IDENTITY_INSERT [dbo].[replaceme_Node] ON
-INSERT [dbo].[replaceme_Node] ([Id], [Name], [NodeId], [NodeTypeId], [Path], [AddedDate], [ChangedDate], [Sequence]) VALUES (1, N'/', NULL, 1, N'/', GETDATE(), GETDATE(), 0)
+INSERT [dbo].[replaceme_Node] ([Id], [Name], [NodeId], [NodeTypeId], [AddedDate], [ChangedDate], [Index]) VALUES (1, N'/', NULL, 1, GETDATE(), GETDATE(), 0)
 SET IDENTITY_INSERT [dbo].[replaceme_Node] OFF
 /****** Object:  Table [dbo].[replaceme_NodeValue]    Script Date: 02/02/2012 23:09:46 ******/
 SET ANSI_NULLS ON
@@ -67,7 +66,7 @@ CREATE TABLE [dbo].[replaceme_NodeValue](
 	[StringValue] [varchar](max) NULL,
 	[BinaryValue] [image] NULL,
 	[DateTimeValue] [datetime] NULL,
-	[Sequence] [int] NOT NULL DEFAULT 0,
+	[Index] [int] NOT NULL DEFAULT 0,
  CONSTRAINT [PK_replaceme_NodeValue] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

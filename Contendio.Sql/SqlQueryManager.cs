@@ -162,7 +162,7 @@ namespace Contendio.Sql
 
         public IList<NodeEntity> GetSubNodesForNode(Int64 nodeId)
         {
-            var childrenQuery = from node in NodeQueryable where node.NodeId.HasValue && node.NodeId.Value.Equals(nodeId) select node;
+            var childrenQuery = from node in NodeQueryable where node.NodeId.HasValue && node.NodeId.Value.Equals(nodeId) orderby node.Index select node;
             var children = childrenQuery.ToList();
             return children;
         }

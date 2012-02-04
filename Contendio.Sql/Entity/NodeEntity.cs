@@ -23,13 +23,7 @@ namespace Contendio.Sql.Entity
         /// </summary>
         [Column]
         public string Name { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [Column]
-        public string Path { get; set; }
-
+        
         /// <summary>
         /// 
         /// </summary>
@@ -58,6 +52,6 @@ namespace Contendio.Sql.Entity
         /// 
         /// </summary>
         [Column]
-        public int Sequence { get; set; }
+        public int Index { get; set; }
     }
 }

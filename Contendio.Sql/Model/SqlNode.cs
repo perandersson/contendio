@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Contendio.Exceptions;
 using Contendio.Sql.Entity;
 using Contendio.Event;
 using Contendio.Model;
 using System.Transactions;
-using Contendio.Exception;
 
 namespace Contendio.Sql.Model
 {
@@ -144,7 +144,18 @@ namespace Contendio.Sql.Model
 
         public string Path
         {
-            get { return Entity.Path; }
+            get
+            {
+                //"/" + Name + "/" + Name;
+
+                var sb = new StringBuilder();
+                var parent = ParentNode;
+                if (parent != null)
+                    sb.Append(parent.Path);
+
+                sb.Append(Name);
+                return sb.ToString();
+            }
         }
 
         public INode AddNode(string name)
@@ -173,16 +184,16 @@ namespace Contendio.Sql.Model
             sqlNode.NodeTypeId = QueryManager.GetNodeType(type).Id;
             sqlNode.AddedDate = DateTime.Now;
             sqlNode.ChangedDate = DateTime.Now;
-
-            string appendName = Path;
-            if (!Entity.NodeId.HasValue)
-                appendName = "";
-            string path = appendName + "/" + name;
-
-            sqlNode.Path = path;
+            sqlNode.Index = GetNumChildren();
+            
             QueryManager.Save(sqlNode);
 
             return new SqlNode(sqlNode, ContentRepository);
+        }
+
+        private int GetNumChildren()
+        {
+            return Children.Count;
         }
 
         public INode GetNode(string path)
@@ -209,6 +220,61 @@ namespace Contendio.Sql.Model
 
             var nodeModel = new SqlNode(resultEntity, ContentRepository);
             return nodeModel;
+        }
+
+        public void MoveBefore(INode node)
+        {
+            ValidateNodeAsRootNode(this);
+            ValidateNodeAsRootNode(node as SqlNode);
+
+            if (IsNodeSame(node))
+                return;
+
+            var thisIndex = Entity.Index;
+            var otherIndex = ((SqlNode) node).Entity.Index;
+
+            var list = ParentNode.Children;
+            list.RemoveAt(thisIndex);
+            list.Insert(otherIndex, this);
+
+            for (int i = 0; i < list.Count; ++i )
+            {
+                SetIndexToNode(list[i] as SqlNode, i);
+            }
+        }
+
+        private bool IsNodeSame(INode node)
+        {
+            if (node == null)
+                return false;
+
+            return Entity.Id == node.Id;
+        }
+
+        private void SetIndexToNode(SqlNode node, int index)
+        {
+            node.Entity.Index = index;
+            QueryManager.Save(node.Entity);
+        }
+
+        public void MoveAfter(INode node)
+        {
+            ValidateNodeAsRootNode(this);
+            ValidateNodeAsRootNode(node as SqlNode);
+
+            if (IsNodeSame(node))
+                return;
+
+            throw new NotImplementedException();
+        }
+
+        private void ValidateNodeAsRootNode(SqlNode node)
+        {
+            if (node == null)
+                throw new ArgumentNullException("node");
+
+            if(!node.Entity.NodeId.HasValue)
+                throw new CannotMoveNodeException("Cannot move root node");
         }
 
         public void Delete()

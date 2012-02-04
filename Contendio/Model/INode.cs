@@ -71,6 +71,18 @@ namespace Contendio.Model
         INode GetNode(string path);
 
         /// <summary>
+        /// Moves this node before the supplied node
+        /// </summary>
+        /// <param name="node"></param>
+        void MoveBefore(INode node);
+
+        /// <summary>
+        /// Moves this node after the supplied node
+        /// </summary>
+        /// <param name="node"></param>
+        void MoveAfter(INode node);
+
+        /// <summary>
         /// Removes this node from the repository
         /// </summary>
         void Delete();
