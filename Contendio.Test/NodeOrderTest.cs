@@ -272,13 +272,13 @@ namespace Contendio.Test
         {
             IContentRepository contentRepository = ContentRepository;
             var rootNode = GetRootNode(contentRepository);
-
             var childNode1 = rootNode.GetNode("childNode1");
+            var childNode2 = rootNode.GetNode("childNode2");
+
             Assert.IsTrue(rootNode.IsParentOf(childNode1));
             Assert.IsTrue(rootNode.IsParentOf(childNode1.GetNode("one")));
             Assert.IsTrue(childNode1.IsParentOf(childNode1.GetNode("one")));
 
-            var childNode2 = rootNode.GetNode("childNode2");
             Assert.IsTrue(rootNode.IsParentOf(childNode2));
             Assert.IsFalse(childNode2.IsParentOf(childNode1.GetNode("one")));
 
@@ -287,6 +287,54 @@ namespace Contendio.Test
 
             Assert.IsFalse(childNode1.IsParentOf(childNode1));
             Assert.IsFalse(childNode2.IsParentOf(childNode2));
+            Assert.IsFalse(rootNode.IsParentOf(rootNode));
+
+        }
+
+        [TestMethod]
+        public void IsNodeChildOf()
+        {
+            IContentRepository contentRepository = ContentRepository;
+            var rootNode = GetRootNode(contentRepository);
+            var childNode1 = rootNode.GetNode("childNode1");
+            var childNode2 = rootNode.GetNode("childNode2");
+            var c1One = childNode1.GetNode("one");
+            var c1Two = childNode1.GetNode("two");
+            var c1Three = childNode1.GetNode("three");
+            var c1ThreeOne = c1Three.GetNode("one");
+            var c2One = childNode2.GetNode("one");
+            var c2Two = childNode2.GetNode("two");
+            var c2Three = childNode2.GetNode("three");
+
+            Assert.IsTrue(childNode1.IsChildOf(rootNode));
+            Assert.IsTrue(childNode2.IsChildOf(rootNode));
+            Assert.IsTrue(c1One.IsChildOf(rootNode));
+            Assert.IsTrue(c1Two.IsChildOf(rootNode));
+            Assert.IsTrue(c1Three.IsChildOf(rootNode));
+            Assert.IsTrue(c1ThreeOne.IsChildOf(rootNode));
+            Assert.IsTrue(c2One.IsChildOf(rootNode));
+            Assert.IsTrue(c2Two.IsChildOf(rootNode));
+            Assert.IsTrue(c2Three.IsChildOf(rootNode));
+
+            Assert.IsTrue(c1One.IsChildOf(childNode1));
+            Assert.IsTrue(c1Two.IsChildOf(childNode1));
+            Assert.IsTrue(c1Three.IsChildOf(childNode1));
+            Assert.IsTrue(c1ThreeOne.IsChildOf(childNode1));
+
+            Assert.IsTrue(c2One.IsChildOf(childNode2));
+            Assert.IsTrue(c2Two.IsChildOf(childNode2));
+            Assert.IsTrue(c2Three.IsChildOf(childNode2));
+
+            Assert.IsFalse(c1One.IsChildOf(childNode2));
+            Assert.IsFalse(c1Two.IsChildOf(childNode2));
+            Assert.IsFalse(c1Three.IsChildOf(childNode2));
+            Assert.IsFalse(c1ThreeOne.IsChildOf(childNode2));
+
+            Assert.IsFalse(c2One.IsChildOf(childNode1));
+            Assert.IsFalse(c2Two.IsChildOf(childNode1));
+            Assert.IsFalse(c2Three.IsChildOf(childNode1));
+
+            Assert.IsFalse(rootNode.IsChildOf(rootNode));
         }
 
         [TestMethod]

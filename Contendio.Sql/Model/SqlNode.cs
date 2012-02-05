@@ -466,7 +466,23 @@ namespace Contendio.Sql.Model
 
         public bool IsChildOf(INode node)
         {
-            throw new NotImplementedException();
+            if (node == null)
+                return false;
+
+            if (IsRootNode())
+                return false;
+
+            if (Id.Equals(node.Id))
+                return false;
+
+            var parent = ParentNode;
+            do
+            {
+                if (parent.Id == node.Id)
+                    return true;
+            } while ((parent = parent.ParentNode) != null);
+
+            return false;
         }
 
         private NodeValueEntity CreateNewValueEntity(string name, string type)
