@@ -45,7 +45,11 @@ namespace Contendio.Sql.Model
         {
             get
             {
-                return Entity.Name;
+                var name = Entity.Name;
+                if (name == null)
+                    return string.Empty;
+
+                return name;
             }
             set
             {
@@ -146,16 +150,24 @@ namespace Contendio.Sql.Model
         {
             get
             {
-                //"/" + Name + "/" + Name;
-
-                var sb = new StringBuilder();
-                var parent = ParentNode;
-                if (parent != null)
-                    sb.Append(parent.Path);
-
-                sb.Append(Name);
-                return sb.ToString();
+                return CalculatePath();
             }
+        }
+
+        private string CalculatePath()
+        {
+            //"/" + Name + "/" + Name;
+            if (!Entity.NodeId.HasValue)
+                return "/";
+
+            var sb = new StringBuilder();
+            var parent = ParentNode as SqlNode;
+            if (parent != null && parent.Entity.NodeId.HasValue)
+                sb.Append(parent.Path);
+
+            sb.Append("/");
+            sb.Append(Name);
+            return sb.ToString();
         }
 
         public INode AddNode(string name)

@@ -32,7 +32,7 @@ SET ANSI_PADDING ON
 GO
 CREATE TABLE [dbo].[replaceme_Node](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Name] [varchar](64) NOT NULL,
+	[Name] [varchar](64) NULL,
 	[NodeId] [bigint] NULL,
 	[NodeTypeId] [int] NOT NULL,
 	[AddedDate] [datetime] NOT NULL,
@@ -47,7 +47,7 @@ GO
 SET ANSI_PADDING OFF
 GO
 SET IDENTITY_INSERT [dbo].[replaceme_Node] ON
-INSERT [dbo].[replaceme_Node] ([Id], [Name], [NodeId], [NodeTypeId], [AddedDate], [ChangedDate], [Index]) VALUES (1, N'/', NULL, 1, GETDATE(), GETDATE(), 0)
+INSERT [dbo].[replaceme_Node] ([Id], [Name], [NodeId], [NodeTypeId], [AddedDate], [ChangedDate], [Index]) VALUES (1, NULL, NULL, 1, GETDATE(), GETDATE(), 0)
 SET IDENTITY_INSERT [dbo].[replaceme_Node] OFF
 /****** Object:  Table [dbo].[replaceme_NodeValue]    Script Date: 02/02/2012 23:09:46 ******/
 SET ANSI_NULLS ON
