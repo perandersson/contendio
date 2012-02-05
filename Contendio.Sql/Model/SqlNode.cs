@@ -237,7 +237,7 @@ namespace Contendio.Sql.Model
         public void MoveBefore(INode node)
         {
             ValidateNodeAsRootNode(this);
-            ValidateNodeAsRootNode(node as SqlNode);
+            ValidateNodeAsRootNode(node);
 
             if (IsNodeSame(node))
                 return;
@@ -270,7 +270,8 @@ namespace Contendio.Sql.Model
         public void MoveAfter(INode node)
         {
             ValidateNodeAsRootNode(this);
-            ValidateNodeAsRootNode(node as SqlNode);
+            ValidateNodeAsRootNode(node);
+            ValidateNodeMovementCirculation(node as SqlNode);
 
             if (IsNodeSame(node))
                 return;
@@ -278,12 +279,18 @@ namespace Contendio.Sql.Model
             throw new NotImplementedException();
         }
 
-        private void ValidateNodeAsRootNode(SqlNode node)
+        private void ValidateNodeMovementCirculation(SqlNode node)
+        {
+            if(IsParentOf(node))
+                throw new CannotMoveNodeException("Cannot move supplied node because the movement would create circulated node hierarchy");
+        }
+
+        private void ValidateNodeAsRootNode(INode node)
         {
             if (node == null)
                 throw new ArgumentNullException("node");
 
-            if(!node.Entity.NodeId.HasValue)
+            if(node.IsRootNode())
                 throw new CannotMoveNodeException("Cannot move root node");
         }
 
@@ -408,6 +415,58 @@ namespace Contendio.Sql.Model
 
             QueryManager.Save(valueEntity);
             return new SqlNodeValue(valueEntity, ContentRepository);
+        }
+
+        public bool IsParentOf(INode node)
+        {
+            if (node == null)
+                return false;
+
+            if (node.IsRootNode())
+                return false;
+
+            if (Id.Equals(node.Id))
+                return false;
+
+            var parent = node.ParentNode;
+            do
+            {
+                if (parent.Id == Id)
+                    return true;
+            } while ((parent = parent.ParentNode) != null);
+
+            return false;
+        }
+
+        public bool IsRootNode()
+        {
+            return Entity.NodeId.HasValue == false;
+        }
+
+        public bool IsSiblingOf(INode node)
+        {
+            if (node == null)
+                return false;
+
+            if (Id.Equals(node.Id))
+                return false;
+
+            if (IsRootNode())
+                return false;
+
+            var sqlNode = node as SqlNode;
+            if (sqlNode == null)
+                return false;
+
+            if(sqlNode.IsRootNode())
+                return false;
+
+            return sqlNode.Entity.NodeId.Value.Equals(Entity.NodeId.Value);
+        }
+
+        public bool IsChildOf(INode node)
+        {
+            throw new NotImplementedException();
         }
 
         private NodeValueEntity CreateNewValueEntity(string name, string type)

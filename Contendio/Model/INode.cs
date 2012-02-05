@@ -143,5 +143,32 @@ namespace Contendio.Model
         /// <param name="type"></param>
         /// <returns></returns>
         INodeValue AddValue(string name, byte[] array, string type);
+
+        /// <summary>
+        /// Checks if this node is the parent node of the supplied node object
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        bool IsParentOf(INode node);
+
+        /// <summary>
+        /// Checks if this node is the child node of the supplied node object
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        bool IsChildOf(INode node);
+
+        /// <summary>
+        /// Checks if this node is a root node
+        /// </summary>
+        /// <returns></returns>
+        bool IsRootNode();
+
+        /// <summary>
+        /// Checks if the this node and the supplied node is siblings
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        bool IsSiblingOf(INode node);
     }
 }
