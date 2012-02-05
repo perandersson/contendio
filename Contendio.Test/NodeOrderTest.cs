@@ -134,16 +134,16 @@ namespace Contendio.Test
             children[0].MoveBefore(children[2]);
             children = rootNode.Children;
             Assert.AreEqual(3, children.Count);
-            Assert.AreEqual("childNode1", children[0].Name);
-            Assert.AreEqual("childNode2", children[1].Name);
+            Assert.AreEqual("childNode2", children[0].Name);
+            Assert.AreEqual("childNode1", children[1].Name);
             Assert.AreEqual("childNode3", children[2].Name);
 
             children[2].MoveBefore(children[1]);
             children = rootNode.Children;
             Assert.AreEqual(3, children.Count);
-            Assert.AreEqual("childNode1", children[0].Name);
+            Assert.AreEqual("childNode2", children[0].Name);
             Assert.AreEqual("childNode3", children[1].Name);
-            Assert.AreEqual("childNode2", children[2].Name);
+            Assert.AreEqual("childNode1", children[2].Name);
         }
 
         [TestMethod]

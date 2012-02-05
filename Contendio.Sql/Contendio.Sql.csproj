@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayUtils.cs" />
     <Compile Include="Mapping\RepositoryMetaType.cs" />
     <Compile Include="SqlUtils.cs" />
     <Compile Include="Entity\IEntityWithId.cs" />

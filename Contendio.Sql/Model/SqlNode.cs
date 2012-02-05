@@ -245,13 +245,11 @@ namespace Contendio.Sql.Model
             var thisIndex = Entity.Index;
             var otherIndex = ((SqlNode) node).Entity.Index;
 
-            var list = ParentNode.Children;
-            list.RemoveAt(thisIndex);
-            list.Insert(otherIndex, this);
+            var movedItems = ArrayUtils.MoveItemBefore(ParentNode.Children, thisIndex, otherIndex);
 
-            for (int i = 0; i < list.Count; ++i )
+            for (int i = 0; i < movedItems.Count; ++i)
             {
-                SetIndexToNode(list[i] as SqlNode, i);
+                SetIndexToNode(movedItems[i] as SqlNode, i);
             }
         }
 
