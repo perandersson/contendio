@@ -18,11 +18,11 @@ namespace Contendio.Sql
         public SqlObserverManager ObserverManager { get { return _observerManager; } }
         public DataContext DataContext { get; private set; }
         public IQueryManager QueryManager { get { return _queryManager; } }
-
+        
         #region Private members
 
-        private SqlObserverManager _observerManager;
-        private SqlQueryManager _queryManager;
+        private readonly SqlObserverManager _observerManager;
+        private readonly SqlQueryManager _queryManager;
 
         #endregion
 
@@ -42,37 +42,6 @@ namespace Contendio.Sql
 
             DataContext = new DataContext(connectionString, new RepositoryMappingSource(Workspace));
             this._queryManager = new SqlQueryManager(workspace, DataContext);
-        }
-
-
-        public void Save(INode node)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Save(INodeValue nodeValue)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Save(INodeType nodeType)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(INode node)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(INodeValue nodeValue)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(INodeType nodeType)
-        {
-            throw new NotImplementedException();
         }
     }
 }

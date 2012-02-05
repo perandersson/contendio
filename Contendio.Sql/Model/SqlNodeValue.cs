@@ -47,7 +47,11 @@ namespace Contendio.Sql.Model
             }
             set
             {
+                if (value.Contains("/"))
+                    throw new InvalidNameException("The name can't contain the reserved character '/'");
+
                 Entity.Name = value;
+                QueryManager.Save(Entity);
             }
         }
 

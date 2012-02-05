@@ -46,14 +46,15 @@ namespace Contendio.Sql.Model
             get
             {
                 var name = Entity.Name;
-                if (name == null)
-                    return string.Empty;
-
-                return name;
+                return name ?? string.Empty;
             }
             set
             {
+                if(value.Contains("/"))
+                    throw new InvalidNameException("The name can't contain the reserved character '/'");
+            
                 Entity.Name = value;
+                QueryManager.Save(Entity);
             }
         }
 
@@ -67,14 +68,15 @@ namespace Contendio.Sql.Model
                 var parentQuery = from node in QueryManager.NodeQueryable where node.Id.Equals(Entity.NodeId.Value) select node;
                 var parent = parentQuery.FirstOrDefault();
 
-                if (parent == null)
-                    return null;
-
-                return new SqlNode(parent, ContentRepository);
+                return parent == null ? null : new SqlNode(parent, ContentRepository);
             }
             set
             {
-                throw new NotImplementedException();
+                if(IsRootNode())
+                    throw new CannotMoveNodeException("It is not possible to move the root node");
+
+                Entity.NodeId = value.Id;
+                QueryManager.Save(Entity);
             }
         }
 
@@ -88,7 +90,11 @@ namespace Contendio.Sql.Model
             }
             set
             {
-                throw new NotImplementedException();
+                if (IsRootNode())
+                    throw new CannotMoveNodeException("It is not possible to set the root node type");
+
+                Entity.NodeTypeId = value.Id;
+                QueryManager.Save(Entity);
             }
         }
 
@@ -197,7 +203,7 @@ namespace Contendio.Sql.Model
             sqlNode.AddedDate = DateTime.Now;
             sqlNode.ChangedDate = DateTime.Now;
             sqlNode.Index = GetNumChildren();
-            
+
             QueryManager.Save(sqlNode);
 
             return new SqlNode(sqlNode, ContentRepository);
@@ -216,7 +222,7 @@ namespace Contendio.Sql.Model
             if (paths.Length > 1)
             {
                 var node = GetNode(paths[0]);
-                for(int i = 1; i < paths.Length; ++i)
+                for(var i = 1; i < paths.Length; ++i)
                 {
                     node = node.GetNode(paths[i]);
                 }
@@ -227,17 +233,14 @@ namespace Contendio.Sql.Model
             var id = Entity.Id;
             var result = (from node in QueryManager.NodeQueryable where node.NodeId.HasValue && node.NodeId.Value.Equals(id) && node.Name.Equals(path) select node);
             var resultEntity = result.FirstOrDefault();
-            if (resultEntity == null)
-                return null;
-
-            var nodeModel = new SqlNode(resultEntity, ContentRepository);
-            return nodeModel;
+            return resultEntity == null ? null : new SqlNode(resultEntity, ContentRepository);
         }
 
         public void MoveBefore(INode node)
         {
             ValidateNodeAsRootNode(this);
             ValidateNodeAsRootNode(node);
+            ValidateNodeMovementCirculation(node as SqlNode);
 
             if (IsNodeSame(node))
                 return;
@@ -245,11 +248,44 @@ namespace Contendio.Sql.Model
             var thisIndex = Entity.Index;
             var otherIndex = ((SqlNode) node).Entity.Index;
 
-            var movedItems = ArrayUtils.MoveItemBefore(ParentNode.Children, thisIndex, otherIndex);
+            var otherParent = node.ParentNode;
 
-            for (int i = 0; i < movedItems.Count; ++i)
+            // Make sure that we can move this node between different parents
+            if (ParentNode.Id.Equals(otherParent.Id))
             {
-                SetIndexToNode(movedItems[i] as SqlNode, i);
+                var movedItems = ArrayUtils.MoveItemBefore(ParentNode.Children, thisIndex, otherIndex);
+
+                using (var transactionScope = new TransactionScope())
+                {
+                    for (var i = 0; i < movedItems.Count; ++i)
+                    {
+                        SetIndexToNode(movedItems[i] as SqlNode, i);
+                    }
+                    transactionScope.Complete();
+                }
+            }
+            else
+            {
+                using (var transactionScope = new TransactionScope())
+                {
+                    var childrenList = otherParent.Children;
+                    var thisChildList = ParentNode.Children;
+
+                    childrenList.Insert(otherIndex, this);
+                    thisChildList.RemoveAt(thisIndex);
+                    for (var i = 0; i < childrenList.Count; ++i)
+                    {
+                        SetIndexToNode(childrenList[i] as SqlNode, i);
+                    }
+
+                    for (var i = 0; i < thisChildList.Count; ++i)
+                    {
+                        SetIndexToNode(thisChildList[i] as SqlNode, i);
+                    }
+                    Entity.NodeId = otherParent.Id;
+                    QueryManager.Save(Entity);
+                    transactionScope.Complete();
+                }
             }
         }
 
@@ -276,13 +312,63 @@ namespace Contendio.Sql.Model
             if (IsNodeSame(node))
                 return;
 
-            throw new NotImplementedException();
+            var thisIndex = Entity.Index;
+            var otherIndex = ((SqlNode)node).Entity.Index;
+
+            var otherParent = node.ParentNode;
+
+            // Make sure that we can move this node between different parents
+            if (ParentNode.Id.Equals(otherParent.Id))
+            {
+                var movedItems = ArrayUtils.MoveItemAfter(ParentNode.Children, thisIndex, otherIndex);
+
+                using (var transactionScope = new TransactionScope())
+                {
+                    for (var i = 0; i < movedItems.Count; ++i)
+                    {
+                        SetIndexToNode(movedItems[i] as SqlNode, i);
+                    }
+                    transactionScope.Complete();
+                }
+            }
+            else
+            {
+                using (var transactionScope = new TransactionScope())
+                {
+                    var childrenList = otherParent.Children;
+                    var thisChildList = ParentNode.Children;
+
+                    var lastItem = childrenList.Last();
+                    if(lastItem.Id.Equals(otherIndex))
+                    {
+                        childrenList.Add(this);
+                    }
+                    else
+                    {
+                        childrenList.Insert(otherIndex + 1, this);
+                    }
+
+                    thisChildList.RemoveAt(thisIndex);
+                    for (var i = 0; i < childrenList.Count; ++i)
+                    {
+                        SetIndexToNode(childrenList[i] as SqlNode, i);
+                    }
+
+                    for (var i = 0; i < thisChildList.Count; ++i)
+                    {
+                        SetIndexToNode(thisChildList[i] as SqlNode, i);
+                    }
+                    Entity.NodeId = otherParent.Id;
+                    QueryManager.Save(Entity);
+                    transactionScope.Complete();
+                }
+            }
         }
 
         private void ValidateNodeMovementCirculation(SqlNode node)
         {
             if(IsParentOf(node))
-                throw new CannotMoveNodeException("Cannot move supplied node because the movement would create circulated node hierarchy");
+                throw new CannotMoveNodeException("Cannot move supplied node because it would result in nodes being unreachable");
         }
 
         private void ValidateNodeAsRootNode(INode node)
@@ -319,7 +405,7 @@ namespace Contendio.Sql.Model
             if (paths.Length > 1)
             {
                 var node = GetNode(paths[0]);
-                for (int i = 1; i < paths.Length; ++i)
+                for (var i = 1; i < paths.Length; ++i)
                 {
                     node = node.GetNode(paths[i]);
                 }
@@ -438,32 +524,6 @@ namespace Contendio.Sql.Model
             return false;
         }
 
-        public bool IsRootNode()
-        {
-            return Entity.NodeId.HasValue == false;
-        }
-
-        public bool IsSiblingOf(INode node)
-        {
-            if (node == null)
-                return false;
-
-            if (Id.Equals(node.Id))
-                return false;
-
-            if (IsRootNode())
-                return false;
-
-            var sqlNode = node as SqlNode;
-            if (sqlNode == null)
-                return false;
-
-            if(sqlNode.IsRootNode())
-                return false;
-
-            return sqlNode.Entity.NodeId.Value.Equals(Entity.NodeId.Value);
-        }
-
         public bool IsChildOf(INode node)
         {
             if (node == null)
@@ -483,6 +543,32 @@ namespace Contendio.Sql.Model
             } while ((parent = parent.ParentNode) != null);
 
             return false;
+        }
+
+        public bool IsSiblingOf(INode node)
+        {
+            if (node == null)
+                return false;
+
+            if (Id.Equals(node.Id))
+                return false;
+
+            if (IsRootNode())
+                return false;
+
+            var sqlNode = node as SqlNode;
+            if (sqlNode == null)
+                return false;
+
+            if (sqlNode.IsRootNode())
+                return false;
+
+            return sqlNode.Entity.NodeId.Value.Equals(Entity.NodeId.Value);
+        }
+
+        public bool IsRootNode()
+        {
+            return Entity.NodeId.HasValue == false;
         }
 
         private NodeValueEntity CreateNewValueEntity(string name, string type)

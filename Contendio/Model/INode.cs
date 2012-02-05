@@ -159,16 +159,16 @@ namespace Contendio.Model
         bool IsChildOf(INode node);
 
         /// <summary>
-        /// Checks if this node is a root node
-        /// </summary>
-        /// <returns></returns>
-        bool IsRootNode();
-
-        /// <summary>
         /// Checks if the this node and the supplied node is siblings
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
         bool IsSiblingOf(INode node);
+
+        /// <summary>
+        /// Checks if this node is a root node
+        /// </summary>
+        /// <returns></returns>
+        bool IsRootNode();
     }
 }

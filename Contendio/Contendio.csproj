@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Exceptions\CannotMoveNodeException.cs" />
     <Compile Include="Exceptions\ContendioBaseException.cs" />
+    <Compile Include="Exceptions\InvalidNameException.cs" />
     <Compile Include="Exceptions\InvalidNodeValueTypeException.cs" />
     <Compile Include="Model\INode.cs" />
     <Compile Include="Model\INodeType.cs" />

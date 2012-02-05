@@ -117,5 +117,60 @@ namespace Contendio.Test
             Assert.AreEqual(items[3], movedItems[4]);
         }
 
+        [TestMethod]
+        public void ArrayUtilMoveAfter()
+        {
+            var items = new List<string>() { "one", "two", "three", "four", "five" };
+            var movedItems = ArrayUtils.MoveItemAfter(items, 0, 0);
+
+            Assert.AreEqual(items[0], movedItems[0]);
+            Assert.AreEqual(items[1], movedItems[1]);
+            Assert.AreEqual(items[2], movedItems[2]);
+            Assert.AreEqual(items[3], movedItems[3]);
+            Assert.AreEqual(items[4], movedItems[4]);
+
+            movedItems = ArrayUtils.MoveItemAfter(items, 0, 1);
+            Assert.AreEqual(items[1], movedItems[0]);
+            Assert.AreEqual(items[0], movedItems[1]);
+            Assert.AreEqual(items[2], movedItems[2]);
+            Assert.AreEqual(items[3], movedItems[3]);
+            Assert.AreEqual(items[4], movedItems[4]);
+
+            movedItems = ArrayUtils.MoveItemAfter(items, 0, 2);
+            Assert.AreEqual(items[1], movedItems[0]);
+            Assert.AreEqual(items[2], movedItems[1]);
+            Assert.AreEqual(items[0], movedItems[2]);
+            Assert.AreEqual(items[3], movedItems[3]);
+            Assert.AreEqual(items[4], movedItems[4]);
+
+            movedItems = ArrayUtils.MoveItemAfter(items, 0, 3);
+            Assert.AreEqual(items[1], movedItems[0]);
+            Assert.AreEqual(items[2], movedItems[1]);
+            Assert.AreEqual(items[3], movedItems[2]);
+            Assert.AreEqual(items[0], movedItems[3]);
+            Assert.AreEqual(items[4], movedItems[4]);
+
+            movedItems = ArrayUtils.MoveItemAfter(items, 0, 4);
+            Assert.AreEqual(items[1], movedItems[0]);
+            Assert.AreEqual(items[2], movedItems[1]);
+            Assert.AreEqual(items[3], movedItems[2]);
+            Assert.AreEqual(items[4], movedItems[3]);
+            Assert.AreEqual(items[0], movedItems[4]);
+
+            movedItems = ArrayUtils.MoveItemAfter(items, 4, 0);
+            Assert.AreEqual(items[4], movedItems[0]);
+            Assert.AreEqual(items[0], movedItems[1]);
+            Assert.AreEqual(items[1], movedItems[2]);
+            Assert.AreEqual(items[2], movedItems[3]);
+            Assert.AreEqual(items[3], movedItems[4]);
+
+            movedItems = ArrayUtils.MoveItemAfter(items, 4, 4);
+            Assert.AreEqual(items[0], movedItems[0]);
+            Assert.AreEqual(items[1], movedItems[1]);
+            Assert.AreEqual(items[2], movedItems[2]);
+            Assert.AreEqual(items[3], movedItems[3]);
+            Assert.AreEqual(items[4], movedItems[4]);
+        }
+
     }
 }

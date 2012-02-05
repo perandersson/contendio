@@ -25,7 +25,7 @@ namespace Contendio.Sql
             var item = newList[moveIndex];
             newList.RemoveAt(moveIndex);
 
-            if (moveAfterIndex > moveIndex) moveAfterIndex++;
+            //if (moveAfterIndex > moveIndex) moveAfterIndex++;
 
             newList.Insert(moveAfterIndex, item);
             return newList;

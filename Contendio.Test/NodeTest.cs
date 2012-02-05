@@ -136,5 +136,36 @@ namespace Contendio.Test
             var four = childNode.GetNode("one/two/three/four");
             Assert.IsNull(four);
         }
+
+        [TestMethod]
+        public void SetParentUsingProperty()
+        {
+            IContentRepository contentRepository = ContentRepository;
+
+            var rootNode = contentRepository.RootNode;
+            Assert.IsNotNull(rootNode);
+            var childNode1 = rootNode.AddNode("childNode1");
+            var childNode2 = rootNode.AddNode("childNode2");
+            var subChildNode1 = childNode1.AddNode("subChildNode1");
+
+            var children = childNode1.Children;
+            Assert.AreEqual(1, children.Count);
+            Assert.AreEqual("subChildNode1", children[0].Name);
+            Assert.AreEqual("/childNode1/subChildNode1", children[0].Path);
+
+            children = childNode2.Children;
+            Assert.AreEqual(0, children.Count);
+
+            children = childNode1.Children;
+            children[0].ParentNode = childNode2;
+
+            children = childNode1.Children;
+            Assert.AreEqual(0, children.Count);
+
+            children = childNode2.Children;
+            Assert.AreEqual(1, children.Count);
+            Assert.AreEqual("subChildNode1", children[0].Name);
+            Assert.AreEqual("/childNode2/subChildNode1", children[0].Path);
+        }
     }
 }

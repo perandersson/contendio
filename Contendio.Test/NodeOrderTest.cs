@@ -12,7 +12,7 @@ using System.Transactions;
 namespace Contendio.Test
 {
     [TestClass]
-    public class NodeOrderTest
+    public class NodeOrderTest : BaseNodeData
     {
         private const string DatabaseSchema = "contendio";
         private const string ConnectionString = "Data Source=.\\SQLEXPRESS;Initial Catalog=" + DatabaseSchema + ";Integrated Security=True";
@@ -33,56 +33,7 @@ namespace Contendio.Test
                 return contentRepository;
             }
         }
-
-        /**
-         * node:root
-         * |-   childNode1
-         *      |-  one
-         *          two
-         *          three
-         *          |- one
-         *          four
-         *          five
-         *      childNode2
-         *      |-  one
-         *          two
-         *          three
-         *          |- one
-         *          four
-         *          five
-         *          |- one
-         *      childNode3
-         *      |-  one
-         *          two
-         *          |- one
-         *          three
-         *          four
-         *          five
-         */
-        public INode GetRootNode(IContentRepository contentRepository)
-        {
-            var rootNode = contentRepository.RootNode;
-            var childNode = rootNode.AddNode("childNode1");
-            childNode.AddNode("one");
-            childNode.AddNode("two");
-            childNode.AddNode("three").AddNode("one");
-            childNode.AddNode("four");
-            childNode.AddNode("five");
-            childNode = rootNode.AddNode("childNode2");
-            childNode.AddNode("one");
-            childNode.AddNode("two");
-            childNode.AddNode("three").AddNode("one");
-            childNode.AddNode("four");
-            childNode.AddNode("five").AddNode("one");
-            childNode = rootNode.AddNode("childNode3");
-            childNode.AddNode("one");
-            childNode.AddNode("two").AddNode("one");
-            childNode.AddNode("three");
-            childNode.AddNode("four");
-            childNode.AddNode("five");
-            return rootNode;
-        }
-
+        
         [TestInitialize]
         public void Initialize()
         {
@@ -93,47 +44,6 @@ namespace Contendio.Test
         public void Cleanup()
         {
             ContentInstall.Uninstall();
-        }
-
-        [TestMethod]
-        public void NodeMoveChildAfterInSameParent()
-        {
-            IContentRepository contentRepository = ContentRepository;
-            var rootNode = GetRootNode(contentRepository);
-            var children = rootNode.Children;
-
-            Assert.AreEqual(3, children.Count);
-            Assert.AreEqual("childNode1", children[0].Name);
-            Assert.AreEqual("childNode2", children[1].Name);
-            Assert.AreEqual("childNode3", children[2].Name);
-
-            children[0].MoveAfter(children[1]);
-            children = rootNode.Children;
-            Assert.AreEqual(3, children.Count);
-            Assert.AreEqual("childNode2", children[0].Name);
-            Assert.AreEqual("childNode1", children[1].Name);
-            Assert.AreEqual("childNode3", children[2].Name);
-
-            children[0].MoveAfter(children[1]);
-            children = rootNode.Children;
-            Assert.AreEqual(3, children.Count);
-            Assert.AreEqual("childNode1", children[0].Name);
-            Assert.AreEqual("childNode2", children[1].Name);
-            Assert.AreEqual("childNode3", children[2].Name);
-
-            children[0].MoveAfter(children[2]);
-            children = rootNode.Children;
-            Assert.AreEqual(3, children.Count);
-            Assert.AreEqual("childNode2", children[0].Name);
-            Assert.AreEqual("childNode3", children[1].Name);
-            Assert.AreEqual("childNode1", children[2].Name);
-
-            children[1].MoveAfter(children[2]);
-            children = rootNode.Children;
-            Assert.AreEqual(3, children.Count);
-            Assert.AreEqual("childNode2", children[0].Name);
-            Assert.AreEqual("childNode1", children[1].Name);
-            Assert.AreEqual("childNode3", children[2].Name);
         }
 
         [TestMethod]
@@ -194,26 +104,7 @@ namespace Contendio.Test
             childNode.MoveBefore(rootNode);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CannotMoveNodeException))]
-        public void MoveChildNodeAfterRoot()
-        {
-            IContentRepository contentRepository = ContentRepository;
-            var rootNode = GetRootNode(contentRepository);
-            var childNode = rootNode.GetNode("childNode2");
-            childNode.MoveAfter(rootNode);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(CannotMoveNodeException))]
-        public void MoveRootNodeAfterChild()
-        {
-            IContentRepository contentRepository = ContentRepository;
-            var rootNode = GetRootNode(contentRepository);
-            var childNode = rootNode.GetNode("childNode2");
-            rootNode.MoveAfter(childNode);
-        }
-
+       
         [TestMethod]
         [ExpectedException(typeof(CannotMoveNodeException))]
         public void MoveRootNodeBeforeChild()
@@ -240,32 +131,49 @@ namespace Contendio.Test
         }
 
         [TestMethod]
-        public void MoveSameChildNodeAfter()
-        {
-
-            IContentRepository contentRepository = ContentRepository;
-            var rootNode = GetRootNode(contentRepository);
-            var children = rootNode.Children;
-
-            Assert.AreEqual(3, children.Count);
-            Assert.AreEqual("childNode2", children[1].Name);
-
-            children = rootNode.Children;
-            children[1].MoveAfter(children[1]);
-            Assert.AreEqual("childNode2", children[1].Name);
-        }
-
-        [TestMethod]
         public void TestMoveBetweenParentsBefore()
         {
-            throw new NotImplementedException();
+            IContentRepository contentRepository = ContentRepository;
+            var rootNode = GetRootNode(contentRepository);
+            var childNode1 = rootNode.GetNode("childNode1");
+            var childNode1Children = childNode1.Children;
+            var childNode2 = rootNode.GetNode("childNode2");
+            var childNode2Children = childNode2.Children;
+            
+            Assert.IsNotNull(childNode1Children);
+            Assert.IsNotNull(childNode2Children);
+
+            Assert.AreEqual(5, childNode1Children.Count);
+            Assert.AreEqual(5, childNode2Children.Count);
+
+            childNode2Children[2].MoveBefore(childNode1Children[2]);
+
+            childNode1Children = childNode1.Children;
+            childNode2Children = childNode2.Children;
+
+            Assert.IsNotNull(childNode1Children);
+            Assert.IsNotNull(childNode2Children);
+
+            Assert.AreEqual(6, childNode1Children.Count);
+            Assert.AreEqual(4, childNode2Children.Count);
+
+            Assert.AreEqual("one", childNode1Children[0].Name);
+            Assert.AreEqual("two", childNode1Children[1].Name);
+            Assert.AreEqual("three", childNode1Children[2].Name);
+            Assert.AreEqual(1, childNode1Children[2].Children.Count);
+            Assert.AreEqual("2_one", childNode1Children[2].Children[0].Name);
+            Assert.AreEqual("three", childNode1Children[3].Name);
+            Assert.AreEqual(1, childNode1Children[3].Children.Count);
+            Assert.AreEqual("1_one", childNode1Children[3].Children[0].Name);
+            Assert.AreEqual("four", childNode1Children[4].Name);
+            Assert.AreEqual("five", childNode1Children[5].Name);
+
+            Assert.AreEqual("one", childNode2Children[0].Name);
+            Assert.AreEqual("two", childNode2Children[1].Name);
+            Assert.AreEqual("four", childNode2Children[2].Name);
+            Assert.AreEqual("five", childNode2Children[3].Name);
         }
 
-        [TestMethod]
-        public void TestMoveBetweenParentsAfter()
-        {
-            throw new NotImplementedException();
-        }
 
         [TestMethod]
         public void IsNodeParentOf()
@@ -301,7 +209,7 @@ namespace Contendio.Test
             var c1One = childNode1.GetNode("one");
             var c1Two = childNode1.GetNode("two");
             var c1Three = childNode1.GetNode("three");
-            var c1ThreeOne = c1Three.GetNode("one");
+            var c1ThreeOne = c1Three.GetNode("1_one");
             var c2One = childNode2.GetNode("one");
             var c2Two = childNode2.GetNode("two");
             var c2Three = childNode2.GetNode("three");
@@ -440,7 +348,7 @@ namespace Contendio.Test
             var rootNode = GetRootNode(contentRepository);
             var childNode3 = rootNode.GetNode("childNode3");
             var two = childNode3.GetNode("two");
-            var one = two.GetNode("one");
+            var one = two.GetNode("3_one");
             childNode3.MoveBefore(one);
         }
     }
