@@ -116,7 +116,25 @@ namespace Contendio.Test
         [TestMethod]
         public void TestGetRelativeDeepNodePath()
         {
-            throw new NotImplementedException();
+            IContentRepository contentRepository = ContentRepository;
+
+            var rootNode = contentRepository.RootNode;
+            Assert.IsNotNull(rootNode);
+            var three = rootNode.AddNode("childNode/one/two/three");
+            Assert.AreEqual("three", three.Name);
+            Assert.AreEqual("/childNode/one/two/three", three.Path);
+
+            three = rootNode.GetNode("childNode/one/two/three");
+            Assert.AreEqual("three", three.Name);
+            Assert.AreEqual("/childNode/one/two/three", three.Path);
+
+            var childNode = rootNode.GetNode("childNode");
+            three = childNode.GetNode("one/two/three");
+            Assert.AreEqual("three", three.Name);
+            Assert.AreEqual("/childNode/one/two/three", three.Path);
+
+            var four = childNode.GetNode("one/two/three/four");
+            Assert.IsNull(four);
         }
     }
 }
