@@ -18,5 +18,17 @@ namespace Contendio.Sql
             newList.Insert(moveBeforeIndex, item);
             return newList;
         }
+
+        public static IList<TEntity> MoveItemAfter<TEntity>(IList<TEntity> items, int moveIndex, int moveAfterIndex)
+        {
+            var newList = new List<TEntity>(items);
+            var item = newList[moveIndex];
+            newList.RemoveAt(moveIndex);
+
+            if (moveAfterIndex > moveIndex) moveAfterIndex++;
+
+            newList.Insert(moveAfterIndex, item);
+            return newList;
+        }
     }
 }
