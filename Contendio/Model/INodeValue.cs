@@ -50,7 +50,7 @@ namespace Contendio.Model
         /// Retrieves the date if it's a value id.
         /// </summary>
         /// <returns></returns>
-        DateTime? GetDateTime();
+        DateTime GetDateTime();
 
         /// <summary>
         /// Retrieve the value as an integer

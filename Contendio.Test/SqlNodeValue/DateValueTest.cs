@@ -33,8 +33,7 @@ namespace Contendio.Test.SqlNodeValue
 
             Assert.IsNotNull(value1);
             Assert.AreEqual("value1", value1.Name);
-            Assert.IsTrue(value1.GetDateTime().HasValue);
-            Assert.IsTrue(DateAreEqual(now, value1.GetDateTime().Value));
+            Assert.IsTrue(DateAreEqual(now, value1.GetDateTime()));
         }
 
         [TestMethod]
@@ -48,7 +47,7 @@ namespace Contendio.Test.SqlNodeValue
 
             Assert.IsNotNull(value1);
             Assert.AreEqual("value1", value1.Name);
-            Assert.IsTrue(DateAreEqual(now, value1.GetDateTime().Value));
+            Assert.IsTrue(DateAreEqual(now, value1.GetDateTime()));
         }
 
         [TestMethod]
@@ -64,7 +63,7 @@ namespace Contendio.Test.SqlNodeValue
             Assert.AreEqual(1, values.Count);
 
             Assert.AreEqual("value1", values[0].Name);
-            Assert.IsTrue(DateAreEqual(now, values[0].GetDateTime().Value));
+            Assert.IsTrue(DateAreEqual(now, values[0].GetDateTime()));
         }
 
         [TestMethod]
@@ -81,15 +80,15 @@ namespace Contendio.Test.SqlNodeValue
 
             Assert.IsNotNull(value1);
             Assert.AreEqual("value1", value1.Name);
-            Assert.IsTrue(DateAreEqual(date1, value1.GetDateTime().Value));
+            Assert.IsTrue(DateAreEqual(date1, value1.GetDateTime()));
 
             Assert.IsNotNull(value2);
             Assert.AreEqual("value2", value2.Name);
-            Assert.IsTrue(DateAreEqual(date2, value2.GetDateTime().Value));
+            Assert.IsTrue(DateAreEqual(date2, value2.GetDateTime()));
 
             Assert.IsNotNull(value3);
             Assert.AreEqual("value3", value3.Name);
-            Assert.IsTrue(DateAreEqual(date3, value3.GetDateTime().Value));
+            Assert.IsTrue(DateAreEqual(date3, value3.GetDateTime()));
         }
 
         [TestMethod]
@@ -109,15 +108,15 @@ namespace Contendio.Test.SqlNodeValue
 
             Assert.IsNotNull(value1);
             Assert.AreEqual("value1", value1.Name);
-            Assert.IsTrue(DateAreEqual(date1, value1.GetDateTime().Value));
+            Assert.IsTrue(DateAreEqual(date1, value1.GetDateTime()));
 
             Assert.IsNotNull(value2);
             Assert.AreEqual("value2", value2.Name);
-            Assert.IsTrue(DateAreEqual(date2, value2.GetDateTime().Value));
+            Assert.IsTrue(DateAreEqual(date2, value2.GetDateTime()));
 
             Assert.IsNotNull(value3);
             Assert.AreEqual("value3", value3.Name);
-            Assert.IsTrue(DateAreEqual(date3, value3.GetDateTime().Value));
+            Assert.IsTrue(DateAreEqual(date3, value3.GetDateTime()));
         }
 
         [TestMethod]
@@ -137,13 +136,13 @@ namespace Contendio.Test.SqlNodeValue
             Assert.AreEqual(3, values.Count);
 
             Assert.AreEqual("value1", values[0].Name);
-            Assert.IsTrue(DateAreEqual(date1, values[0].GetDateTime().Value));
+            Assert.IsTrue(DateAreEqual(date1, values[0].GetDateTime()));
 
             Assert.AreEqual("value2", values[1].Name);
-            Assert.IsTrue(DateAreEqual(date2, values[1].GetDateTime().Value));
+            Assert.IsTrue(DateAreEqual(date2, values[1].GetDateTime()));
 
             Assert.AreEqual("value3", values[2].Name);
-            Assert.IsTrue(DateAreEqual(date3, values[2].GetDateTime().Value));
+            Assert.IsTrue(DateAreEqual(date3, values[2].GetDateTime()));
         }
 
         [TestMethod]
@@ -161,11 +160,11 @@ namespace Contendio.Test.SqlNodeValue
 
             Assert.IsNotNull(value1);
             Assert.AreEqual("value1", value1.Name);
-            Assert.IsTrue(DateAreEqual(date1, value1.GetDateTime().Value));
+            Assert.IsTrue(DateAreEqual(date1, value1.GetDateTime()));
 
             Assert.IsNotNull(value2);
             Assert.AreEqual("value2", value2.Name);
-            Assert.IsTrue(DateAreEqual(date2, value2.GetDateTime().Value));
+            Assert.IsTrue(DateAreEqual(date2, value2.GetDateTime()));
         }
 
         [TestMethod]
@@ -185,11 +184,11 @@ namespace Contendio.Test.SqlNodeValue
 
             Assert.IsNotNull(value1);
             Assert.AreEqual("value1", value1.Name);
-            Assert.IsTrue(DateAreEqual(date1, value1.GetDateTime().Value));
+            Assert.IsTrue(DateAreEqual(date1, value1.GetDateTime()));
 
             Assert.IsNotNull(value2);
             Assert.AreEqual("value2", value2.Name);
-            Assert.IsTrue(DateAreEqual(date2, value2.GetDateTime().Value));
+            Assert.IsTrue(DateAreEqual(date2, value2.GetDateTime()));
         }
 
         [TestMethod]
@@ -214,11 +213,11 @@ namespace Contendio.Test.SqlNodeValue
             Assert.AreEqual(1, values2.Count);
 
             Assert.AreEqual("value1", values1[0].Name);
-            Assert.IsTrue(DateAreEqual(date1, values1[0].GetDateTime().Value));
+            Assert.IsTrue(DateAreEqual(date1, values1[0].GetDateTime()));
 
             Assert.AreEqual("value2", values2[0].Name);
             Assert.AreEqual(date2, values2[0].GetDateTime());
-            Assert.IsTrue(DateAreEqual(date2, values2[0].GetDateTime().Value));
+            Assert.IsTrue(DateAreEqual(date2, values2[0].GetDateTime()));
         }
 
         [TestMethod]
@@ -230,7 +229,7 @@ namespace Contendio.Test.SqlNodeValue
             var value = rootNode.AddValue("date1", now.ToString(CultureInfo.InvariantCulture));
 
             Assert.IsNotNull(value);
-            Assert.IsTrue(DateAreEqual(now, value.GetDateTime().Value));
+            Assert.IsTrue(DateAreEqual(now, value.GetDateTime()));
         }
 
         [TestMethod]
@@ -243,8 +242,7 @@ namespace Contendio.Test.SqlNodeValue
             var value = rootNode.GetValue("date1");
 
             Assert.IsNotNull(value);
-            Assert.IsNotNull(value.GetDateTime().HasValue);
-            Assert.IsTrue(DateAreEqual(now, value.GetDateTime().Value));
+            Assert.IsTrue(DateAreEqual(now, value.GetDateTime()));
         }
 
         [TestMethod]
@@ -263,20 +261,50 @@ namespace Contendio.Test.SqlNodeValue
             Assert.AreEqual(2, values.Count);
 
             Assert.AreEqual("value1", values[0].Name);
-            Assert.IsTrue(DateAreEqual(date3, values[0].GetDateTime().Value));
+            Assert.IsTrue(DateAreEqual(date3, values[0].GetDateTime()));
 
             Assert.AreEqual("value2", values[1].Name);
-            Assert.IsTrue(DateAreEqual(date2, values[1].GetDateTime().Value));
+            Assert.IsTrue(DateAreEqual(date2, values[1].GetDateTime()));
             
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidNameException))]
-        public void SqlNodeValue_AddInvalidDate()
+        public void SqlNodeValue_AddInvalidDateName()
         {
             var contentRepository = ContentRepository;
             var rootNode = GetRootNode(contentRepository);
-            rootNode.AddValue("/namehere", "value");
+            rootNode.AddValue("/value1", DateTime.Now);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidNodeValueTypeException))]
+        public void SqlNodeValue_GetInvalidDateTime()
+        {
+            var contentRepository = ContentRepository;
+            var rootNode = GetRootNode(contentRepository);
+            var value = rootNode.AddValue("value1", "stringvalue");
+            value.GetDateTime();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidNodeValueTypeException))]
+        public void SqlNodeValue_GetInvalidDateFromInt()
+        {
+            var contentRepository = ContentRepository;
+            var rootNode = GetRootNode(contentRepository);
+            var value = rootNode.AddValue("value1", 100);
+            value.GetDateTime();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidNodeValueTypeException))]
+        public void SqlNodeValue_GetInvalidDateFromBinary()
+        {
+            var contentRepository = ContentRepository;
+            var rootNode = GetRootNode(contentRepository);
+            var value = rootNode.AddValue("value1", new byte[] {1, 2, 3, 4, 5});
+            value.GetDateTime();
         }
     }
 }

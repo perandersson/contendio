@@ -22,6 +22,7 @@ INSERT [dbo].[replaceme_NodeType] ([Id], [Name]) VALUES (2, N'node:node')
 INSERT [dbo].[replaceme_NodeType] ([Id], [Name]) VALUES (3, N'value:string')
 INSERT [dbo].[replaceme_NodeType] ([Id], [Name]) VALUES (4, N'value:binary')
 INSERT [dbo].[replaceme_NodeType] ([Id], [Name]) VALUES (5, N'value:date')
+INSERT [dbo].[replaceme_NodeType] ([Id], [Name]) VALUES (6, N'value:int')
 SET IDENTITY_INSERT [dbo].[replaceme_NodeType] OFF
 /****** Object:  Table [dbo].[replaceme_Node]    Script Date: 02/02/2012 23:09:46 ******/
 SET ANSI_NULLS ON

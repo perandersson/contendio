@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using Contendio.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Contendio.Test.SqlNodeValue
 {
     [TestClass]
-    public class StringValueTest : BaseTest
+    public class IntValueTest : BaseTest
     {
         [TestInitialize]
         public void Initialize()
@@ -23,166 +24,166 @@ namespace Contendio.Test.SqlNodeValue
         }
 
         [TestMethod]
-        public void SqlNodeValue_AddStringValue()
+        public void SqlNodeValue_AddIntValue()
         {
             var contentRepository = ContentRepository;
             var rootNode = GetRootNode(contentRepository);
-            var value1 = rootNode.AddValue("value1", "value1value");
+            var value1 = rootNode.AddValue("value1", 10);
 
             Assert.IsNotNull(value1);
             Assert.AreEqual("value1", value1.Name);
-            Assert.AreEqual("value1value", value1.GetString());
+            Assert.AreEqual(10, value1.GetInteger());
         }
 
         [TestMethod]
-        public void SqlNodeValue_GetStringValue()
+        public void SqlNodeValue_GetIntValue()
         {
             var contentRepository = ContentRepository;
             var rootNode = GetRootNode(contentRepository);
-            rootNode.AddValue("value1", "value1value");
+            rootNode.AddValue("value1", 10);
             var value1 = rootNode.GetValue("value1");
 
             Assert.IsNotNull(value1);
             Assert.AreEqual("value1", value1.Name);
-            Assert.AreEqual("value1value", value1.GetString());
+            Assert.AreEqual(10, value1.GetInteger());
         }
 
         [TestMethod]
-        public void SqlNodeValue_GetStringValues_GetAsValueList()
+        public void SqlNodeValue_GetIntValues_GetAsValueList()
         {
             var contentRepository = ContentRepository;
             var rootNode = GetRootNode(contentRepository);
-            rootNode.AddValue("value1", "value1value");
+            rootNode.AddValue("value1", 10);
             var values = rootNode.Values;
 
             Assert.IsNotNull(values);
             Assert.AreEqual(1, values.Count);
 
             Assert.AreEqual("value1", values[0].Name);
-            Assert.AreEqual("value1value", values[0].GetString());
+            Assert.AreEqual(10, values[0].GetInteger());
         }
 
         [TestMethod]
-        public void SqlNodeValue_AddStringValues_GetAsString()
+        public void SqlNodeValue_AddIntValues_GetAsInteger()
         {
             var contentRepository = ContentRepository;
             var rootNode = GetRootNode(contentRepository);
-            var value1 = rootNode.AddValue("value1", "value1value");
-            var value2 = rootNode.AddValue("value2", "value2value");
-            var value3 = rootNode.AddValue("value3", "value3value");
+            var value1 = rootNode.AddValue("value1", 10);
+            var value2 = rootNode.AddValue("value2", 20);
+            var value3 = rootNode.AddValue("value3", 30);
 
             Assert.IsNotNull(value1);
             Assert.AreEqual("value1", value1.Name);
-            Assert.AreEqual("value1value", value1.GetString());
+            Assert.AreEqual(10, value1.GetInteger());
 
             Assert.IsNotNull(value2);
             Assert.AreEqual("value2", value2.Name);
-            Assert.AreEqual("value2value", value2.GetString());
+            Assert.AreEqual(20, value2.GetInteger());
 
             Assert.IsNotNull(value3);
             Assert.AreEqual("value3", value3.Name);
-            Assert.AreEqual("value3value", value3.GetString());
+            Assert.AreEqual(30, value3.GetInteger());
         }
 
         [TestMethod]
-        public void SqlNodeValue_GetStringValues_GetAsString()
+        public void SqlNodeValue_GetIntValues_GetAsInteger()
         {
             var contentRepository = ContentRepository;
             var rootNode = GetRootNode(contentRepository);
-            rootNode.AddValue("value1", "value1value");
-            rootNode.AddValue("value2", "value2value");
-            rootNode.AddValue("value3", "value3value");
+            rootNode.AddValue("value1", 10);
+            rootNode.AddValue("value2", 20);
+            rootNode.AddValue("value3", 30);
             var value1 = rootNode.GetValue("value1");
             var value2 = rootNode.GetValue("value2");
             var value3 = rootNode.GetValue("value3");
 
             Assert.IsNotNull(value1);
             Assert.AreEqual("value1", value1.Name);
-            Assert.AreEqual("value1value", value1.GetString());
+            Assert.AreEqual(10, value1.GetInteger());
 
             Assert.IsNotNull(value2);
             Assert.AreEqual("value2", value2.Name);
-            Assert.AreEqual("value2value", value2.GetString());
+            Assert.AreEqual(20, value2.GetInteger());
 
             Assert.IsNotNull(value3);
             Assert.AreEqual("value3", value3.Name);
-            Assert.AreEqual("value3value", value3.GetString());
+            Assert.AreEqual(30, value3.GetInteger());
         }
 
         [TestMethod]
-        public void SqlNodeValue_AddStringValues_GetAsValueList()
+        public void SqlNodeValue_AddIntValues_GetAsValueList()
         {
             var contentRepository = ContentRepository;
             var rootNode = GetRootNode(contentRepository);
-            rootNode.AddValue("value1", "value1value");
-            rootNode.AddValue("value2", "value2value");
-            rootNode.AddValue("value3", "value3value");
+            rootNode.AddValue("value1", 10);
+            rootNode.AddValue("value2", 20);
+            rootNode.AddValue("value3", 30);
             var values = rootNode.Values;
 
             Assert.IsNotNull(values);
             Assert.AreEqual(3, values.Count);
 
             Assert.AreEqual("value1", values[0].Name);
-            Assert.AreEqual("value1value", values[0].GetString());
+            Assert.AreEqual(10, values[0].GetInteger());
 
             Assert.AreEqual("value2", values[1].Name);
-            Assert.AreEqual("value2value", values[1].GetString());
+            Assert.AreEqual(20, values[1].GetInteger());
 
             Assert.AreEqual("value3", values[2].Name);
-            Assert.AreEqual("value3value", values[2].GetString());
+            Assert.AreEqual(30, values[2].GetInteger());
         }
 
         [TestMethod]
-        public void SqlNodeValue_AddStringValuesInTwoParents_GetAsString()
+        public void SqlNodeValue_AddIntValuesInTwoParents_GetAsInteger()
         {
             var contentRepository = ContentRepository;
             var rootNode = GetRootNode(contentRepository);
             var childNode1 = rootNode.GetNode("childNode1");
             var childNode2 = rootNode.GetNode("childNode2");
 
-            var value1 = childNode1.AddValue("value1", "value1value");
-            var value2 = childNode2.AddValue("value2", "value2value");
+            var value1 = childNode1.AddValue("value1", 10);
+            var value2 = childNode2.AddValue("value2", 20);
 
             Assert.IsNotNull(value1);
             Assert.AreEqual("value1", value1.Name);
-            Assert.AreEqual("value1value", value1.GetString());
+            Assert.AreEqual(10, value1.GetInteger());
 
             Assert.IsNotNull(value2);
             Assert.AreEqual("value2", value2.Name);
-            Assert.AreEqual("value2value", value2.GetString());
+            Assert.AreEqual(20, value2.GetInteger());
         }
 
         [TestMethod]
-        public void SqlNodeValue_GetStringValuesInTwoParents_GetAsString()
+        public void SqlNodeValue_GetIntValuesInTwoParents_GetAsInteger()
         {
             var contentRepository = ContentRepository;
             var rootNode = GetRootNode(contentRepository);
             var childNode1 = rootNode.GetNode("childNode1");
             var childNode2 = rootNode.GetNode("childNode2");
-            childNode1.AddValue("value1", "value1value");
-            childNode2.AddValue("value2", "value2value");
+            childNode1.AddValue("value1", 10);
+            childNode2.AddValue("value2", 20);
 
             var value1 = childNode1.GetValue("value1");
             var value2 = childNode2.GetValue("value2");
 
             Assert.IsNotNull(value1);
             Assert.AreEqual("value1", value1.Name);
-            Assert.AreEqual("value1value", value1.GetString());
+            Assert.AreEqual(10, value1.GetInteger());
 
             Assert.IsNotNull(value2);
             Assert.AreEqual("value2", value2.Name);
-            Assert.AreEqual("value2value", value2.GetString());
+            Assert.AreEqual(20, value2.GetInteger());
         }
 
         [TestMethod]
-        public void SqlNodeValue_AddStringValuesInTwoParents_GetAsStringFromValues()
+        public void SqlNodeValue_AddIntegerValuesInTwoParents_GetAsIntegerFromValues()
         {
             var contentRepository = ContentRepository;
             var rootNode = GetRootNode(contentRepository);
             var childNode1 = rootNode.GetNode("childNode1");
             var childNode2 = rootNode.GetNode("childNode2");
-            childNode1.AddValue("value1", "value1value");
-            childNode2.AddValue("value2", "value2value");
+            childNode1.AddValue("value1", 10);
+            childNode2.AddValue("value2", 20);
 
             var values1 = childNode1.Values;
             var values2 = childNode2.Values;
@@ -194,62 +195,68 @@ namespace Contendio.Test.SqlNodeValue
             Assert.AreEqual(1, values2.Count);
 
             Assert.AreEqual("value1", values1[0].Name);
-            Assert.AreEqual("value1value", values1[0].GetString());
+            Assert.AreEqual(10, values1[0].GetInteger());
 
             Assert.AreEqual("value2", values2[0].Name);
-            Assert.AreEqual("value2value", values2[0].GetString());
+            Assert.AreEqual(20, values2[0].GetInteger());
         }
 
         [TestMethod]
-        public void SqlNodeValue_AddValueDate_GetAsString()
+        public void SqlNodeValue_AddValueString_GetAsInt()
         {
             var contentRepository = ContentRepository;
             var rootNode = GetRootNode(contentRepository);
-            var now = DateTime.Now;
-            var value = rootNode.AddValue("value1", now);
-            
+            var value = rootNode.AddValue("value1", "100");
+
             Assert.IsNotNull(value);
-            Assert.AreEqual(now.ToString(CultureInfo.InvariantCulture), value.GetString());
+            Assert.AreEqual(100, value.GetInteger());
         }
 
         [TestMethod]
-        public void SqlNodeValue_GetValueDate_GetAsString()
+        public void SqlNodeValue_GetValueString_GetAsInteger()
         {
             var contentRepository = ContentRepository;
             var rootNode = GetRootNode(contentRepository);
-            var now = DateTime.Now;
-            rootNode.AddValue("value1", now);
+            rootNode.AddValue("value1", "100");
             var value = rootNode.GetValue("value1");
 
             Assert.IsNotNull(value);
-            Assert.AreEqual(now.ToString(CultureInfo.InvariantCulture), value.GetString());
+            Assert.AreEqual(100, value.GetInteger());
         }
 
         [TestMethod]
-        public void SqlNodeValue_GetValueInt_GetAsString()
+        public void SqlNodeValue_AddAndReplaceInt_GetAsValueList()
         {
             var contentRepository = ContentRepository;
             var rootNode = GetRootNode(contentRepository);
-            rootNode.AddValue("value1", 100);
-            var value = rootNode.GetValue("value1");
-
-            Assert.IsNotNull(value);
-            Assert.AreEqual("100", value.GetString());
-        }
-
-        [TestMethod]
-        public void SqlNodeValue_AddAndReplaceString_GetAsValueList()
-        {
-            var contentRepository = ContentRepository;
-            var rootNode = GetRootNode(contentRepository);
-            rootNode.AddValue("mystringvalue", "hello world!!!");
-            rootNode.AddValue("mystringvalue2", "goodbye world!!!");
-            rootNode.AddValue("mystringvalue", "replacedValue!!!");
+            rootNode.AddValue("value1", 10);
+            rootNode.AddValue("value2", 20);
+            rootNode.AddValue("value1", 30);
 
             var values = rootNode.Values;
             Assert.AreEqual(2, values.Count);
-            Assert.AreEqual("replacedValue!!!", values[0].GetString());
-            Assert.AreEqual("goodbye world!!!", values[1].GetString());
+            Assert.AreEqual(30, values[0].GetInteger());
+            Assert.AreEqual(20, values[1].GetInteger());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidNodeValueTypeException))]
+        public void SqlNodeValue_GetInvalidIntFromBinary()
+        {
+            var contentRepository = ContentRepository;
+            var rootNode = GetRootNode(contentRepository);
+            var value = rootNode.AddValue("value1", new byte[] { 1, 2, 3, 4, 5 });
+            value.GetInteger();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidNodeValueTypeException))]
+        public void SqlNodeValue_GetInvalidIntFromDate()
+        {
+            var contentRepository = ContentRepository;
+            var rootNode = GetRootNode(contentRepository);
+            var value = rootNode.AddValue("value1", DateTime.Now);
+            value.GetInteger();
         }
     }
 }

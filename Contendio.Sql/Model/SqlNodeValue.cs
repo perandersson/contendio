@@ -79,8 +79,13 @@ namespace Contendio.Sql.Model
             if(Entity.DateTimeValue.HasValue)
             {
                 var dateTime = GetDateTime();
-                if (dateTime != null)
-                    return dateTime.Value.ToString(CultureInfo.InvariantCulture);
+                return dateTime.ToString(CultureInfo.InvariantCulture);
+            }
+
+            if(Entity.IntValue.HasValue)
+            {
+                var value = GetInteger();
+                return value.ToString();
             }
 
             if (Entity.BinaryValue != null)
@@ -110,7 +115,7 @@ namespace Contendio.Sql.Model
         }
 
 
-        public DateTime? GetDateTime()
+        public DateTime GetDateTime()
         {
             if (Entity.DateTimeValue.HasValue)
             {
@@ -130,12 +135,30 @@ namespace Contendio.Sql.Model
             if (Entity.BinaryValue != null)
                 throw new InvalidNodeValueTypeException("Cannot convet a Binary value into a DateTime object");
 
-            return null;
+            throw new InvalidNodeValueTypeException("Cannot convet a nothing into a DateTime object");
         }
 
         public int GetInteger()
         {
-            throw new NotImplementedException();
+            if(Entity.IntValue.HasValue)
+            {
+                return Entity.IntValue.Value;
+            }
+
+            if(Entity.StringValue != null)
+            {
+                var str = GetString();
+                int value = 0;
+                if (!int.TryParse(str, out value))
+                    throw new InvalidNodeValueTypeException("Cannot convert the string: '" + str + "' into a int object");
+
+                return value;
+            }
+
+            if (Entity.BinaryValue != null)
+                throw new InvalidNodeValueTypeException("Cannot convet a Binary value into an int object");
+
+            throw new InvalidNodeValueTypeException("Cannot convet a nothing into an int object");
         }
     }
 }
