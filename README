@@ -1,4 +1,5 @@
 # What is a content repository?
+1
 
 A content repository is an abstraction layer between your application source code and the database. It's purpose is to "simulate" that your
 database is a document database.
