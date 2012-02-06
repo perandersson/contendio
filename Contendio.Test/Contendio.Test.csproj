@@ -49,15 +49,16 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseNodeData.cs" />
-    <Compile Include="ContentRepositoryTest.cs" />
-    <Compile Include="MoveNode\MoveNodeAfter.cs" />
-    <Compile Include="NodeOrderTest.cs" />
-    <Compile Include="NodeTest.cs" />
-    <Compile Include="NodeValueTest.cs" />
-    <Compile Include="InstallAndUninstallTest.cs" />
-    <Compile Include="UtilsTest.cs" />
-    <Compile Include="EventTest.cs" />
+    <Compile Include="BaseTest.cs" />
+    <Compile Include="SqlNodeValue\DateValueTest.cs" />
+    <Compile Include="SqlNodeValue\StringValueTest.cs" />
+    <Compile Include="SqlNode\AddNodeTest.cs" />
+    <Compile Include="SqlNode\MoveAfterTest.cs" />
+    <Compile Include="SqlNode\MoveBeforeTest.cs" />
+    <Compile Include="SqlNode\SqlNodeTest.cs" />
+    <Compile Include="SqlRepositorySetupTest.cs" />
+    <Compile Include="SqlUtilsTest.cs" />
+    <Compile Include="ArrayUtilsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

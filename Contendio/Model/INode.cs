@@ -145,6 +145,13 @@ namespace Contendio.Model
         INodeValue AddValue(string name, byte[] array, string type);
 
         /// <summary>
+        /// Retrieves the value in this node by a specific name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        INodeValue GetValue(string name);
+
+        /// <summary>
         /// Checks if this node is the parent node of the supplied node object
         /// </summary>
         /// <param name="node"></param>

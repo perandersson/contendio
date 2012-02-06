@@ -12,20 +12,10 @@ using Contendio.Event;
 namespace Contendio.Test
 {
     [TestClass]
-    public class UtilsTest
+    public class ArrayUtilsTest
     {
-        private const string DatabaseSchema = "contendio";
-        private const string ConnectionString = "Data Source=.\\SQLEXPRESS;Initial Catalog=" + DatabaseSchema + ";Integrated Security=True";
-
         [TestMethod]
-        public void TestConnectionStringToSchema()
-        {
-            var result = SqlUtils.SchemaNameFromConnectionString(ConnectionString);
-            Assert.AreEqual(DatabaseSchema, result);
-        }
-
-        [TestMethod]
-        public void TestMoveBefore()
+        public void ArrayUtils_MoveBefore()
         {
             var items = new List<string>() { "one", "two", "three", "four", "five" };
             var movedItems = ArrayUtils.MoveItemBefore(items, 0, 1);
@@ -118,7 +108,7 @@ namespace Contendio.Test
         }
 
         [TestMethod]
-        public void ArrayUtilMoveAfter()
+        public void ArrayUtils_MoveAfter()
         {
             var items = new List<string>() { "one", "two", "three", "four", "five" };
             var movedItems = ArrayUtils.MoveItemAfter(items, 0, 0);

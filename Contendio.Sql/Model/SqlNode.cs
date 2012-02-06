@@ -50,14 +50,13 @@ namespace Contendio.Sql.Model
             }
             set
             {
-                if(value.Contains("/"))
-                    throw new InvalidNameException("The name can't contain the reserved character '/'");
+                ValidateName(value);
             
                 Entity.Name = value;
                 QueryManager.Save(Entity);
             }
         }
-
+        
         public INode ParentNode
         {
             get
@@ -439,6 +438,12 @@ namespace Contendio.Sql.Model
                 throw new ArgumentException("The '" + valueName + "' argument cannot be empty");
         }
 
+        private static void ValidateName(string value)
+        {
+            if (value.Contains("/"))
+                throw new InvalidNameException("The name can't contain the reserved character '/'");
+        }
+
         public INodeValue AddValue(string name, string value)
         {
             return AddValue(name, value, "value:string");
@@ -448,6 +453,7 @@ namespace Contendio.Sql.Model
         {
             ValidateNonEmpty(name, "name");
             ValidateNonEmpty(value, "value");
+            ValidateName(name);
 
             var valueEntity = GetNodeValueByName(name) ?? CreateNewValueEntity(name, type);
 
@@ -469,6 +475,7 @@ namespace Contendio.Sql.Model
         {
             ValidateNonEmpty(name, "name");
             ValidateNonEmpty(type, "type");
+            ValidateName(name);
 
             var valueEntity = GetNodeValueByName(name) ?? CreateNewValueEntity(name, type);
 
@@ -491,6 +498,7 @@ namespace Contendio.Sql.Model
             ValidateNonEmpty(name, "name");
             ValidateNonEmpty(array, "array");
             ValidateNonEmpty(type, "type");
+            ValidateName(name);
 
             var valueEntity = GetNodeValueByName(name) ?? CreateNewValueEntity(name, type);
 
@@ -501,6 +509,12 @@ namespace Contendio.Sql.Model
 
             QueryManager.Save(valueEntity);
             return new SqlNodeValue(valueEntity, ContentRepository);
+        }
+
+        public INodeValue GetValue(string name)
+        {
+            var result = from value in Values where value.Name.Equals(name) select value;
+            return result.FirstOrDefault();
         }
 
         public bool IsParentOf(INode node)
