@@ -68,6 +68,12 @@ namespace Contendio.Sql.Entity
         /// 
         /// </summary>
         [Column]
+        public int? IntValue { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Column]
         public int Index { get; set; }
     }
 }

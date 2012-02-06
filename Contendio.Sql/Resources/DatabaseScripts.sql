@@ -66,6 +66,7 @@ CREATE TABLE [dbo].[replaceme_NodeValue](
 	[StringValue] [varchar](max) NULL,
 	[BinaryValue] [image] NULL,
 	[DateTimeValue] [datetime] NULL,
+	[IntValue] [int] NULL,
 	[Index] [int] NOT NULL DEFAULT 0,
  CONSTRAINT [PK_replaceme_NodeValue] PRIMARY KEY CLUSTERED 
 (
