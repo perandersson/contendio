@@ -132,5 +132,10 @@ namespace Contendio.Sql.Model
 
             return null;
         }
+
+        public int GetInteger()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

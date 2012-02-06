@@ -51,5 +51,11 @@ namespace Contendio.Model
         /// </summary>
         /// <returns></returns>
         DateTime? GetDateTime();
+
+        /// <summary>
+        /// Retrieve the value as an integer
+        /// </summary>
+        /// <returns></returns>
+        int GetInteger();
     }
 }
