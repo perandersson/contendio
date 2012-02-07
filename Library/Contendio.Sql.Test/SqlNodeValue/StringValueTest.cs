@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Contendio.Model;
+using Contendio.Exceptions;
 
 namespace Contendio.Test.SqlNodeValue
 {
@@ -224,6 +225,41 @@ namespace Contendio.Test.SqlNodeValue
 
             Assert.IsNotNull(value);
             Assert.AreEqual(now.ToString(CultureInfo.InvariantCulture), value.GetString());
+        }
+
+        [TestMethod]
+        public void SqlNodeValue_GetValueBoolTrue_GetAsString()
+        {
+            var contentRepository = ContentRepository;
+            var rootNode = GetRootNode(contentRepository);
+            rootNode.AddValue("value1", true);
+            var value = rootNode.GetValue("value1");
+
+            Assert.IsNotNull(value);
+            Assert.AreEqual("True", value.GetString());
+        }
+
+        [TestMethod]
+        public void SqlNodeValue_GetValueBoolFalse_GetAsString()
+        {
+            var contentRepository = ContentRepository;
+            var rootNode = GetRootNode(contentRepository);
+            rootNode.AddValue("value1", false);
+            var value = rootNode.GetValue("value1");
+
+            Assert.IsNotNull(value);
+            Assert.AreEqual("False", value.GetString());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidNodeValueTypeException))]
+        public void SqlNodeValue_GetValueBinary_GetAsString()
+        {
+            var contentRepository = ContentRepository;
+            var rootNode = GetRootNode(contentRepository);
+            rootNode.AddValue("value1", new byte[] { 23, 32, 12, 10 });
+            var value = rootNode.GetValue("value1");
+            value.GetString();
         }
 
         [TestMethod]

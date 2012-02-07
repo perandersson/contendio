@@ -309,6 +309,16 @@ namespace Contendio.Test.SqlNodeValue
         }
 
         [TestMethod]
+        [ExpectedException(typeof(InvalidNodeValueTypeException))]
+        public void SqlNodeValue_GetInvalidDateFromBool()
+        {
+            var contentRepository = ContentRepository;
+            var rootNode = GetRootNode(contentRepository);
+            var value = rootNode.AddValue("value1", true);
+            value.GetDateTime();
+        }
+
+        [TestMethod]
         public void SqlNodeValue_AddValueType_AsDate()
         {
             var contentRepository = ContentRepository;

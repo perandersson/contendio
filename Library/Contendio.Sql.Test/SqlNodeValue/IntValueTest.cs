@@ -214,6 +214,28 @@ namespace Contendio.Test.SqlNodeValue
         }
 
         [TestMethod]
+        public void SqlNodeValue_AddValueBoolTrue_GetAsInt()
+        {
+            var contentRepository = ContentRepository;
+            var rootNode = GetRootNode(contentRepository);
+            var value = rootNode.AddValue("value1", true);
+
+            Assert.IsNotNull(value);
+            Assert.AreEqual(1, value.GetInteger()); 
+        }
+
+        [TestMethod]
+        public void SqlNodeValue_AddValueBoolFalse_GetAsInt()
+        {
+            var contentRepository = ContentRepository;
+            var rootNode = GetRootNode(contentRepository);
+            var value = rootNode.AddValue("value1", false);
+
+            Assert.IsNotNull(value);
+            Assert.AreEqual(0, value.GetInteger());
+        }
+
+        [TestMethod]
         public void SqlNodeValue_GetValueString_GetAsInteger()
         {
             var contentRepository = ContentRepository;
