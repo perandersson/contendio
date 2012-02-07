@@ -6,11 +6,11 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B2001DDE-0EA9-40C1-AA0E-C291EFAAFF04}</ProjectGuid>
+    <ProjectGuid>{2FA5312F-8540-41B7-AD79-015E0DECBF4F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Contendio.Test</RootNamespace>
-    <AssemblyName>Contendio.Test</AssemblyName>
+    <RootNamespace>Contendio.Sql.Test</RootNamespace>
+    <AssemblyName>Contendio.Sql.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -49,7 +49,18 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayUtilsTest.cs" />
+    <Compile Include="BaseTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlNodeValue\DateValueTest.cs" />
+    <Compile Include="SqlNodeValue\IntValueTest.cs" />
+    <Compile Include="SqlNodeValue\StringValueTest.cs" />
+    <Compile Include="SqlNode\AddNodeTest.cs" />
+    <Compile Include="SqlNode\MoveAfterTest.cs" />
+    <Compile Include="SqlNode\MoveBeforeTest.cs" />
+    <Compile Include="SqlNode\SqlNodeTest.cs" />
+    <Compile Include="SqlRepositorySetupTest.cs" />
+    <Compile Include="SqlUtilsTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Contendio.Sql\Contendio.Sql.csproj">
@@ -61,7 +72,6 @@
       <Name>Contendio</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
