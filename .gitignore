@@ -1,6 +1,6 @@
-*/obj/*
-*/bin/*
-*/*.suo
-*.suo
-TestResults
-_ReSharper.Contendio
+Library/*/obj/*
+Library/*/bin/*
+Library/*/*.suo
+Library/*.suo
+Library/TestResults
+Library/_ReSharper.Contendio
