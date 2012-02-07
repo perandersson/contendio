@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Contendio.Model;
 
 namespace Contendio.Test.SqlNodeValue
 {
@@ -250,6 +251,25 @@ namespace Contendio.Test.SqlNodeValue
             Assert.AreEqual(2, values.Count);
             Assert.AreEqual("replacedValue!!!", values[0].GetString());
             Assert.AreEqual("goodbye world!!!", values[1].GetString());
+        }
+
+        [TestMethod]
+        public void SqlNodeValue_AddValueType_AsString()
+        {
+            var contentRepository = ContentRepository;
+            var rootNode = GetRootNode(contentRepository);
+            var value = rootNode.AddValue("value1", "teststr");
+            Assert.AreEqual(NodeValueType.String, value.ValueType);
+        }
+
+        [TestMethod]
+        public void SqlNodeValue_GetValueType_AsString()
+        {
+            var contentRepository = ContentRepository;
+            var rootNode = GetRootNode(contentRepository);
+            rootNode.AddValue("value1", "teststr");
+            var value = rootNode.GetValue("value1");
+            Assert.AreEqual(NodeValueType.String, value.ValueType);
         }
     }
 }

@@ -71,6 +71,21 @@ namespace Contendio.Sql.Model
             }
         }
 
+        public NodeValueType ValueType
+        {
+            get
+            {
+                if (Entity.StringValue != null)
+                    return NodeValueType.String;
+                else if (Entity.IntValue.HasValue)
+                    return NodeValueType.Integer;
+                else if (Entity.DateTimeValue.HasValue)
+                    return NodeValueType.DateTime;
+                else
+                    return NodeValueType.Binary;
+            }
+        }
+
         public string GetString()
         {
             if(Entity.StringValue != null)

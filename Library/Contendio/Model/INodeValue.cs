@@ -27,6 +27,11 @@ namespace Contendio.Model
         /// The type of this node value.
         /// </summary>
         INodeType NodeType { get; set; }
+        
+        /// <summary>
+        /// The value type (i.e if this is a string, date etc)
+        /// </summary>
+        NodeValueType ValueType { get; }
 
         /// <summary>
         /// Retrieves the value as a normal string.

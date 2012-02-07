@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Contendio.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Contendio.Model;
 
 namespace Contendio.Test.SqlNodeValue
 {
@@ -257,6 +258,25 @@ namespace Contendio.Test.SqlNodeValue
             var rootNode = GetRootNode(contentRepository);
             var value = rootNode.AddValue("value1", DateTime.Now);
             value.GetInteger();
+        }
+
+        [TestMethod]
+        public void SqlNodeValue_AddValueType_AsInteger()
+        {
+            var contentRepository = ContentRepository;
+            var rootNode = GetRootNode(contentRepository);
+            var value = rootNode.AddValue("value1", 100);
+            Assert.AreEqual(NodeValueType.Integer, value.ValueType);
+        }
+
+        [TestMethod]
+        public void SqlNodeValue_GetValueType_AsInteger()
+        {
+            var contentRepository = ContentRepository;
+            var rootNode = GetRootNode(contentRepository);
+            rootNode.AddValue("value1", 100);
+            var value = rootNode.GetValue("value1");
+            Assert.AreEqual(NodeValueType.Integer, value.ValueType);
         }
     }
 }
