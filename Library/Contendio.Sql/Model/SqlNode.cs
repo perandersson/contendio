@@ -461,6 +461,7 @@ namespace Contendio.Sql.Model
             valueEntity.DateTimeValue = null;
             valueEntity.BinaryValue = null;
             valueEntity.IntValue = null;
+            valueEntity.BoolValue = null;
             valueEntity.ChangedDate = DateTime.Now;
 
             QueryManager.Save(valueEntity);
@@ -484,6 +485,7 @@ namespace Contendio.Sql.Model
             valueEntity.DateTimeValue = date;
             valueEntity.BinaryValue = null;
             valueEntity.IntValue = null;
+            valueEntity.BoolValue = null;
             valueEntity.ChangedDate = DateTime.Now;
 
             QueryManager.Save(valueEntity);
@@ -508,6 +510,7 @@ namespace Contendio.Sql.Model
             valueEntity.DateTimeValue = null;
             valueEntity.IntValue = null;
             valueEntity.BinaryValue = array;
+            valueEntity.BoolValue = null;
             valueEntity.ChangedDate = DateTime.Now;
 
             QueryManager.Save(valueEntity);
@@ -530,6 +533,30 @@ namespace Contendio.Sql.Model
             valueEntity.DateTimeValue = null;
             valueEntity.IntValue = value;
             valueEntity.BinaryValue = null;
+            valueEntity.BoolValue = null;
+            valueEntity.ChangedDate = DateTime.Now;
+
+            QueryManager.Save(valueEntity);
+            return new SqlNodeValue(valueEntity, ContentRepository);
+        }
+
+        public INodeValue AddValue(string name, bool value)
+        {
+            return AddValue(name, value, "value:bool");
+        }
+
+        public INodeValue AddValue(string name, bool value, string type)
+        {
+            ValidateNonEmpty(name, "name");
+            ValidateNonEmpty(type, "type");
+
+            var valueEntity = GetNodeValueByName(name) ?? CreateNewValueEntity(name, type);
+
+            valueEntity.StringValue = null;
+            valueEntity.DateTimeValue = null;
+            valueEntity.IntValue = null;
+            valueEntity.BinaryValue = null;
+            valueEntity.BoolValue = value;
             valueEntity.ChangedDate = DateTime.Now;
 
             QueryManager.Save(valueEntity);

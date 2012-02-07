@@ -23,6 +23,7 @@ INSERT [dbo].[replaceme_NodeType] ([Id], [Name]) VALUES (3, N'value:string')
 INSERT [dbo].[replaceme_NodeType] ([Id], [Name]) VALUES (4, N'value:binary')
 INSERT [dbo].[replaceme_NodeType] ([Id], [Name]) VALUES (5, N'value:date')
 INSERT [dbo].[replaceme_NodeType] ([Id], [Name]) VALUES (6, N'value:int')
+INSERT [dbo].[replaceme_NodeType] ([Id], [Name]) VALUES (7, N'value:bool')
 SET IDENTITY_INSERT [dbo].[replaceme_NodeType] OFF
 /****** Object:  Table [dbo].[replaceme_Node]    Script Date: 02/02/2012 23:09:46 ******/
 SET ANSI_NULLS ON
@@ -68,6 +69,7 @@ CREATE TABLE [dbo].[replaceme_NodeValue](
 	[BinaryValue] [image] NULL,
 	[DateTimeValue] [datetime] NULL,
 	[IntValue] [int] NULL,
+	[BoolValue] [bit](1) NULL,
 	[Index] [int] NOT NULL DEFAULT 0,
  CONSTRAINT [PK_replaceme_NodeValue] PRIMARY KEY CLUSTERED 
 (

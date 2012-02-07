@@ -62,5 +62,11 @@ namespace Contendio.Model
         /// </summary>
         /// <returns></returns>
         int GetInteger();
+
+        /// <summary>
+        /// Retrieves the value as a boolean value
+        /// </summary>
+        /// <returns></returns>
+        bool GetBool();
     }
 }

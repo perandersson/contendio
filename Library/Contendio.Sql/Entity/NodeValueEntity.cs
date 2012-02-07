@@ -74,6 +74,12 @@ namespace Contendio.Sql.Entity
         /// 
         /// </summary>
         [Column]
+        public bool? BoolValue { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Column]
         public int Index { get; set; }
     }
 }

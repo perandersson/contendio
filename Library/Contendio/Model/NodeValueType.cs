@@ -7,6 +7,6 @@ namespace Contendio.Model
 {
     public enum NodeValueType
     {
-        String, Binary, DateTime, Integer
+        String, Binary, DateTime, Integer, Boolean
     }
 }

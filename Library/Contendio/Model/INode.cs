@@ -153,13 +153,30 @@ namespace Contendio.Model
         INodeValue AddValue(string name, int value);
 
         /// <summary>
-        /// Adds an integer value to this type
+        /// Adds an integer value to this node of a specific type
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <param name="type"></param>
         /// <returns></returns>
         INodeValue AddValue(string name, int value, string type);
+
+        /// <summary>
+        /// Adds a boolean value to this node
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        INodeValue AddValue(string name, bool value);
+
+        /// <summary>
+        /// Adds a boolean value to this node of a specific type
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        INodeValue AddValue(string name, bool value, string type);
 
         /// <summary>
         /// Retrieves the value in this node by a specific name

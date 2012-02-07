@@ -79,6 +79,8 @@ namespace Contendio.Sql.Model
                     return NodeValueType.String;
                 else if (Entity.IntValue.HasValue)
                     return NodeValueType.Integer;
+                else if (Entity.BoolValue.HasValue)
+                    return NodeValueType.Boolean;
                 else if (Entity.DateTimeValue.HasValue)
                     return NodeValueType.DateTime;
                 else
@@ -103,6 +105,11 @@ namespace Contendio.Sql.Model
                 return value.ToString();
             }
 
+            if (Entity.BoolValue.HasValue)
+            {
+                return Entity.BoolValue.Value.ToString();
+            }
+
             if (Entity.BinaryValue != null)
                 throw new InvalidNodeValueTypeException("Cannot convert a binary value into a string");
 
@@ -124,7 +131,10 @@ namespace Contendio.Sql.Model
             }
 
             if (Entity.DateTimeValue.HasValue)
-                throw new InvalidNodeValueTypeException("Cannot convet a DateType value into a Stream");
+                throw new InvalidNodeValueTypeException("Cannot convet a DateType value type into a Stream type");
+
+            if (Entity.BoolValue.HasValue)
+                throw new InvalidNodeValueTypeException("Cannot convert a Boolean value type into a Stream type");
 
             return null;
         }
@@ -148,7 +158,10 @@ namespace Contendio.Sql.Model
             }
 
             if (Entity.BinaryValue != null)
-                throw new InvalidNodeValueTypeException("Cannot convet a Binary value into a DateTime object");
+                throw new InvalidNodeValueTypeException("Cannot convet a Binary value type into a DateTime type");
+
+            if (Entity.BoolValue.HasValue)
+                throw new InvalidNodeValueTypeException("Cannot convert a Boolean value type into a DateTime type");
 
             throw new InvalidNodeValueTypeException("Cannot convet a nothing into a DateTime object");
         }
@@ -170,10 +183,40 @@ namespace Contendio.Sql.Model
                 return value;
             }
 
+            if (Entity.BoolValue.HasValue)
+            {
+                return GetBool() ? 1 : 0;
+            }
+
             if (Entity.BinaryValue != null)
                 throw new InvalidNodeValueTypeException("Cannot convet a Binary value into an int object");
 
             throw new InvalidNodeValueTypeException("Cannot convet a nothing into an int object");
+        }
+
+        public bool GetBool()
+        {
+            if (Entity.BoolValue.HasValue)
+            {
+                return Entity.BoolValue.Value;
+            }
+
+            if (Entity.IntValue.HasValue)
+            {
+                var intValue = GetInteger();
+                return intValue > 0;
+            }
+
+            if (Entity.StringValue != null)
+            {
+                var strValue = GetString();
+                return "true".Equals(strValue.ToLower()) || "yes".Equals(strValue.ToLower());
+            }
+
+            if (Entity.BinaryValue != null)
+                throw new InvalidNodeValueTypeException("Cannot convet a Binary value into an boolean type");
+
+            throw new InvalidNodeValueTypeException("Cannot convet a nothing into an boolean type");
         }
     }
 }
