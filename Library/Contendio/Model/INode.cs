@@ -211,5 +211,11 @@ namespace Contendio.Model
         /// </summary>
         /// <returns></returns>
         bool IsRootNode();
+
+        /// <summary>
+        /// Do we save a complete version history of this node?
+        /// </summary>
+        /// <returns></returns>
+        bool IsVersionable();
     }
 }

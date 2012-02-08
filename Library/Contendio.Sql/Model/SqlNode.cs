@@ -656,6 +656,10 @@ namespace Contendio.Sql.Model
             var valueEntity = checkForValue.FirstOrDefault();
             return valueEntity;
         }
-        
+
+        public bool IsVersionable()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
