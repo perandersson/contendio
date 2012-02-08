@@ -283,6 +283,16 @@ namespace Contendio.Test.SqlNodeValue
         }
 
         [TestMethod]
+        [ExpectedException(typeof(InvalidNodeValueTypeException))]
+        public void SqlNodeValue_GetInvalidBoolFromString()
+        {
+            var contentRepository = ContentRepository;
+            var rootNode = GetRootNode(contentRepository);
+            var value = rootNode.AddValue("value1", "non-bool value here");
+            value.GetBool();
+        }
+
+        [TestMethod]
         public void SqlNodeValue_AddValueType_AsBoolean()
         {
             var contentRepository = ContentRepository;

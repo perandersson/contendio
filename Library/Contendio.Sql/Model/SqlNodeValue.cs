@@ -113,7 +113,7 @@ namespace Contendio.Sql.Model
             if (Entity.BinaryValue != null)
                 throw new InvalidNodeValueTypeException("Cannot convert a binary value into a string");
 
-            return String.Empty;
+            throw new InvalidNodeValueTypeException("Cannot convert hte current value into a string object type");
         }
 
         public System.IO.Stream GetStream()
@@ -136,7 +136,7 @@ namespace Contendio.Sql.Model
             if (Entity.BoolValue.HasValue)
                 throw new InvalidNodeValueTypeException("Cannot convert a Boolean value type into a Stream type");
 
-            return null;
+            throw new InvalidNodeValueTypeException("Cannot convert hte current value into a stream object type");
         }
 
 
@@ -209,8 +209,14 @@ namespace Contendio.Sql.Model
 
             if (Entity.StringValue != null)
             {
-                var strValue = GetString();
-                return "true".Equals(strValue.ToLower()) || "yes".Equals(strValue.ToLower());
+                var strValue = GetString().ToLower();
+                if ("true".Equals(strValue) || "yes".Equals(strValue))
+                    return true;
+                else if ("false".Equals(strValue) || "no".Equals(strValue))
+                    return false;
+
+                throw new InvalidNodeValueTypeException("Cannot convert the string value into a boolean object type");
+                
             }
 
             if (Entity.BinaryValue != null)
