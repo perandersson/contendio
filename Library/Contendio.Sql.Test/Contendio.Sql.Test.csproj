@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="ArrayUtilsTest.cs" />
     <Compile Include="BaseTest.cs" />
+    <Compile Include="ContentRepository\MultipleWorkspaces.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlNodeValue\BoolValueTest.cs" />
     <Compile Include="SqlNodeValue\DateValueTest.cs" />
