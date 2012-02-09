@@ -29,6 +29,11 @@ namespace Contendio.Model
         INodeType NodeType { get; set; }
 
         /// <summary>
+        /// Retrieves a list of node attributes
+        /// </summary>
+        IList<INodeType> Attributes { get; }
+
+        /// <summary>
         /// The values of this node
         /// </summary>
         IList<INodeValue> Values { get; set; }

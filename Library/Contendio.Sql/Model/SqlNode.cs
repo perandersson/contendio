@@ -97,6 +97,20 @@ namespace Contendio.Sql.Model
             }
         }
 
+        public IList<INodeType> Attributes
+        {
+            get
+            {
+                var attributes = from attribute in QueryManager.NodeAttributeQueryable where attribute.NodeId.Equals(Id) select attribute;
+                List<INodeType> nodeTypes = new List<INodeType>();
+                foreach(var attr in attributes.ToList())
+                {
+                    nodeTypes.Add(new SqlNodeType(QueryManager.GetNodeTypeById(attr.NodeTypeId), ContentRepository));
+                }
+                return nodeTypes;
+            }
+        }
+
         public IList<INodeValue> Values
         {
             get
