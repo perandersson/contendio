@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\CannotAddAttributeOnRootNode.cs" />
     <Compile Include="Exceptions\CannotMoveNodeException.cs" />
     <Compile Include="Exceptions\ContendioBaseException.cs" />
     <Compile Include="Exceptions\InvalidNameException.cs" />

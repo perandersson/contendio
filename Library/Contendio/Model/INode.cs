@@ -191,6 +191,12 @@ namespace Contendio.Model
         INodeValue GetValue(string name);
 
         /// <summary>
+        /// Adds an attribute on this node.
+        /// </summary>
+        /// <param name="attribute"></param>
+        void AddAttribute(string attribute);
+
+        /// <summary>
         /// Checks if this node is the parent node of the supplied node object
         /// </summary>
         /// <param name="node"></param>

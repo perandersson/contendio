@@ -583,6 +583,14 @@ namespace Contendio.Sql.Model
             return result.FirstOrDefault();
         }
 
+        public void AddAttribute(string name)
+        {
+            // Add validation
+            var result = QueryManager.GetNodeType(name);
+            // throw exception when the type wasn't found
+            // Add attribute if it was found
+        }
+
         public bool IsParentOf(INode node)
         {
             if (node == null)
