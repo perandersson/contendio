@@ -60,6 +60,7 @@
     <Compile Include="SqlNode\AddNodeTest.cs" />
     <Compile Include="SqlNode\MoveAfterTest.cs" />
     <Compile Include="SqlNode\MoveBeforeTest.cs" />
+    <Compile Include="SqlNode\NodeAttributeTest.cs" />
     <Compile Include="SqlNode\SqlNodeTest.cs" />
     <Compile Include="SqlRepositorySetupTest.cs" />
     <Compile Include="SqlUtilsTest.cs" />
