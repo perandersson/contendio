@@ -97,6 +97,20 @@ namespace Contendio.Sql.Model
             }
         }
 
+        public IList<INodeType> Attributes
+        {
+            get
+            {
+                var attributes = from attribute in QueryManager.NodeAttributeQueryable where attribute.NodeId.Equals(Id) select attribute;
+                List<INodeType> nodeTypes = new List<INodeType>();
+                foreach(var attr in attributes.ToList())
+                {
+                    nodeTypes.Add(new SqlNodeType(QueryManager.GetNodeTypeById(attr.NodeTypeId), ContentRepository));
+                }
+                return nodeTypes;
+            }
+        }
+
         public IList<INodeValue> Values
         {
             get
@@ -567,6 +581,31 @@ namespace Contendio.Sql.Model
         {
             var result = from value in Values where value.Name.Equals(name) select value;
             return result.FirstOrDefault();
+        }
+
+        public void AddAttribute(string name)
+        {
+            ValidateNonEmpty(name, "name");
+
+            if (IsRootNode())
+                throw new CannotAddAttributeOnRootNode("You can't add any attributes on the root node");
+
+            // Prevent that the same node is added more than once (parhaps use SqlServer to manage this with keys instead?)
+            foreach (var attribute in Attributes)
+            {
+                if (attribute.Name.Equals(name))
+                    throw new CannotAddAttributeTwice("Can't add attribute: '" + name + "' more than once");
+            }
+
+            // Add validation
+            var result = QueryManager.GetNodeType(name);
+            if (result == null)
+                throw new InvalidNodeValueTypeException("Could not find node type: '" + name + "'");
+
+            var nodeAttribute = new NodeAttributeEntity();
+            nodeAttribute.NodeId = Id;
+            nodeAttribute.NodeTypeId = result.Id;
+            QueryManager.Save(nodeAttribute);
         }
 
         public bool IsParentOf(INode node)

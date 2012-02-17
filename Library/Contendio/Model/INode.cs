@@ -29,6 +29,11 @@ namespace Contendio.Model
         INodeType NodeType { get; set; }
 
         /// <summary>
+        /// Retrieves a list of node attributes
+        /// </summary>
+        IList<INodeType> Attributes { get; }
+
+        /// <summary>
         /// The values of this node
         /// </summary>
         IList<INodeValue> Values { get; set; }
@@ -184,6 +189,12 @@ namespace Contendio.Model
         /// <param name="name"></param>
         /// <returns></returns>
         INodeValue GetValue(string name);
+
+        /// <summary>
+        /// Adds an attribute on this node.
+        /// </summary>
+        /// <param name="attribute"></param>
+        void AddAttribute(string attribute);
 
         /// <summary>
         /// Checks if this node is the parent node of the supplied node object

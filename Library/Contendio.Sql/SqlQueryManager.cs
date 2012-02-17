@@ -21,6 +21,7 @@ namespace Contendio.Sql
         private Table<NodeEntity> nodeTable;
         private Table<NodeValueEntity> nodeValueTable;
         private Table<NodeTypeEntity> nodeTypeTable;
+        private Table<NodeAttributeEntity> nodeAttributeTable;
 
         #endregion
 
@@ -31,6 +32,7 @@ namespace Contendio.Sql
             this.nodeTypeTable = DataContext.GetTable<NodeTypeEntity>();
             this.nodeTable = DataContext.GetTable<NodeEntity>();
             this.nodeValueTable = DataContext.GetTable<NodeValueEntity>();
+            this.nodeAttributeTable = DataContext.GetTable<NodeAttributeEntity>();
         }
 
         public IQueryable<NodeEntity> NodeQueryable
@@ -46,6 +48,11 @@ namespace Contendio.Sql
         public IQueryable<NodeTypeEntity> NodeTypeQueryable
         {
             get { return GetQueryable(nodeTypeTable); }
+        }
+
+        public IQueryable<NodeAttributeEntity> NodeAttributeQueryable
+        {
+            get { return GetQueryable(nodeAttributeTable); }
         }
 
         public IQueryable<INode> Nodes
@@ -83,6 +90,11 @@ namespace Contendio.Sql
         public void Save(NodeTypeEntity nodeType)
         {
             Save(nodeTypeTable, nodeType);
+        }
+
+        public void Save(NodeAttributeEntity nodeAttribute)
+        {
+            Save(nodeAttributeTable, nodeAttribute);
         }
 
         private void Save(ITable table, IEntityWithId entity)
@@ -134,6 +146,11 @@ namespace Contendio.Sql
         {
             Delete(nodeTypeTable, nodeType);
         }
+
+        public void Delete(NodeAttributeEntity nodeAttribute)
+        {
+            Delete(nodeAttributeTable, nodeAttribute);
+        }
         
         private void Delete(ITable table, object entity)
         {
@@ -165,6 +182,12 @@ namespace Contendio.Sql
             var childrenQuery = from node in NodeQueryable where node.NodeId.HasValue && node.NodeId.Value.Equals(nodeId) orderby node.Index select node;
             var children = childrenQuery.ToList();
             return children;
+        }
+
+        public NodeTypeEntity GetNodeTypeById(int typeId)
+        {
+            var nodeType = from n in NodeTypeQueryable where n.Id.Equals(typeId) select n;
+            return nodeType.SingleOrDefault();
         }
     }
 }

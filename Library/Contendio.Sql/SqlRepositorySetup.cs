@@ -48,6 +48,7 @@ namespace Contendio.Sql
             var batches = new List<string>
                               {
                                   "USE [" + DatabaseSchema + "]",
+                                  "DROP TABLE [dbo].[" + Workspace + "_NodeAttribute]",
                                   "DROP TABLE [dbo].[" + Workspace + "_NodeValue]",
                                   "DROP TABLE [dbo].[" + Workspace + "_Node]",
                                   "DROP TABLE [dbo].[" + Workspace + "_NodeType]"

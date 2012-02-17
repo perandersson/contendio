@@ -60,6 +60,7 @@
     <Compile Include="SqlNode\AddNodeTest.cs" />
     <Compile Include="SqlNode\MoveAfterTest.cs" />
     <Compile Include="SqlNode\MoveBeforeTest.cs" />
+    <Compile Include="SqlNode\NodeAttributeTest.cs" />
     <Compile Include="SqlNode\SqlNodeTest.cs" />
     <Compile Include="SqlRepositorySetupTest.cs" />
     <Compile Include="SqlUtilsTest.cs" />
@@ -73,6 +74,9 @@
       <Project>{C65EAF33-7D85-4141-A733-DAC8AFDDA756}</Project>
       <Name>Contendio</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SqlAttribute\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
