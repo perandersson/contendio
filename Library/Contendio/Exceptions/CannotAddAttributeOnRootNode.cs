@@ -12,7 +12,8 @@ namespace Contendio.Exceptions
         {
         }
 
-        public CannotAddAttributeOnRootNode(string message) : base(message)
+        public CannotAddAttributeOnRootNode(string message)
+            : base(message)
         {
         }
 

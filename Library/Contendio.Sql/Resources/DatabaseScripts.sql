@@ -25,6 +25,7 @@ INSERT [dbo].[replaceme_NodeType] ([Id], [Name]) VALUES (5, N'value:date')
 INSERT [dbo].[replaceme_NodeType] ([Id], [Name]) VALUES (6, N'value:int')
 INSERT [dbo].[replaceme_NodeType] ([Id], [Name]) VALUES (7, N'value:bool')
 INSERT [dbo].[replaceme_NodeType] ([Id], [Name]) VALUES (8, N'attribute:unmovable')
+INSERT [dbo].[replaceme_NodeType] ([Id], [Name]) VALUES (9, N'attribute:readonly')
 SET IDENTITY_INSERT [dbo].[replaceme_NodeType] OFF
 /****** Object:  Table [dbo].[replaceme_Node]    Script Date: 02/09/2012 18:00:43 ******/
 SET ANSI_NULLS ON

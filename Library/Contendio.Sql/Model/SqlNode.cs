@@ -585,10 +585,27 @@ namespace Contendio.Sql.Model
 
         public void AddAttribute(string name)
         {
+            ValidateNonEmpty(name, "name");
+
+            if (IsRootNode())
+                throw new CannotAddAttributeOnRootNode("You can't add any attributes on the root node");
+
+            // Prevent that the same node is added more than once (parhaps use SqlServer to manage this with keys instead?)
+            foreach (var attribute in Attributes)
+            {
+                if (attribute.Name.Equals(name))
+                    throw new CannotAddAttributeTwice("Can't add attribute: '" + name + "' more than once");
+            }
+
             // Add validation
             var result = QueryManager.GetNodeType(name);
-            // throw exception when the type wasn't found
-            // Add attribute if it was found
+            if (result == null)
+                throw new InvalidNodeValueTypeException("Could not find node type: '" + name + "'");
+
+            var nodeAttribute = new NodeAttributeEntity();
+            nodeAttribute.NodeId = Id;
+            nodeAttribute.NodeTypeId = result.Id;
+            QueryManager.Save(nodeAttribute);
         }
 
         public bool IsParentOf(INode node)
