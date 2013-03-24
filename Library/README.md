@@ -20,9 +20,7 @@ node is always added for you when the database is created.
 The content repository also support a complete customizable node type system. You can see them as tags or keywords for nodes and node values.
 
 ```c#
-
 var contentRepository = new SqlContentRepository("myworkspace", connectionString);
-
 ```
 
 The above example creates the tables:
@@ -40,6 +38,7 @@ When creating a content management system then the workspaces usually needed are
 
 Each workspace is an isolated island. That means that you can't create hard-links between Nodes in different workspaces. You can however create
 "soft" links. Example:
+
 / (type = "node:root")
 /index (type = "customtypes:webpage")
 /index/linkComponent (type = "customtypes:component")
@@ -50,20 +49,17 @@ Each workspace is an isolated island. That means that you can't create hard-link
 And in the code you do something like this:
 
 ```c#
-
 webSiteRoot = contentRepositoryManager.GetContentRepository("website");
 var indexPage = webSiteRoot.GetNode("index");
 var component1 = indexPage.GetNode("linkComponent");
 
 mediaContentRepo = contentRepositoryManager.GetContentRepository(component1.GetValue("workspace"));
 var mediaItem = mediaContentRepo.GetNodeById(component1.GetValue("id"));
-
 ```
 
 Contendio also supports LINQ. Example:
 
 ```c#
-
 from node in RootNode where node.NodeType.Equals("customtypes:webpage") select node;
 from node in RootNode where node.NodeType.Equals("customtypes:webpage") select new {
 	Name = node.Name,
@@ -71,7 +67,6 @@ from node in RootNode where node.NodeType.Equals("customtypes:webpage") select n
 };
 
 from nodeValue in RootNode.Values where !nodeValue.NodeType.Equals("value:hidden") select nodeValue;
-
 ```
 
 All node fetches are lazy. That means that no node data below the current node-level are retrieved from the database.
